@@ -1,0 +1,7 @@
+{
+    "php.version": "8.2.8",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "python.formatting.provider": "none"
+}
