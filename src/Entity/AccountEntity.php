@@ -4,12 +4,11 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\CustomIdGenerator;
-use Symfony\Component\Uid\Uuid;
 
 
 #[ORM\Table(name: "nc_accounts")]
 #[ORM\Entity]
-class Accounts
+class AccountEntity
 {
     #[ORM\Id]
     #[ORM\Column(type: "string", unique: true)]
@@ -91,7 +90,7 @@ class Accounts
         return $this;
     }
 
-    public function isIsVerified(): ?bool
+    public function getIsVerified(): ?bool
     {
         return $this->isVerified;
     }

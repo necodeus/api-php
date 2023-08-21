@@ -2,17 +2,17 @@
 
 namespace App\Repository;
 
-use App\Enum\AccountCreationResponse;
+use App\Enum\AccountCreationStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-use App\Entity\Accounts;
+use App\Entity\AccountEntity;
 
 class AccountsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Accounts::class);
+        parent::__construct($registry, AccountEntity::class);
     }
 
     public function getPublicAccounts(): array
@@ -33,14 +33,14 @@ class AccountsRepository extends ServiceEntityRepository
     {
         $account = $this->findOneBy(['email' => $data['email']]);
 
-        if ($account instanceof Accounts) {
+        if ($account instanceof AccountEntity) {
             return [
-                'status' => AccountCreationResponse::ALREADY_EXISTS,
-                'message' => 'Account with email ' . $data['email'] . ' already exists',
+                'status' => AccountCreationStatus::ALREADY_EXISTS,
+                'message' => "Account with email {$data['email']} already exists",
             ];
         }
 
-        $account = new Accounts();
+        $account = new AccountEntity();
 
         $account->setName($data['name']);
         $account->setEmail($data['email']);
@@ -52,16 +52,16 @@ class AccountsRepository extends ServiceEntityRepository
         $em->persist($account);
         $em->flush();
 
-        if ($account instanceof Accounts === false) {
+        if ($account instanceof AccountEntity === false) {
             return [
-                'status' => AccountCreationResponse::FAILED,
-                'message' => 'Account with email ' . $data['email'] . ' could not be created',
+                'status' => AccountCreationStatus::FAILED,
+                'message' => "Account with email {$data['email']} could not be created",
             ];
         }
 
         return [
-            'status' => AccountCreationResponse::SUCCESS,
-            'message' => 'Account with email ' . $data['email'] . ' created successfully',
+            'status' => AccountCreationStatus::SUCCESS,
+            'message' => "Account with email {$data['email']} created successfully",
             'data' => $account,
         ];
     }
