@@ -23,7 +23,7 @@ class LinkController extends AbstractController
 
         return $this->json([
             'status' => 'ok',
-            'data' => $links,
+            'links' => $links,
         ]);
     }
 }

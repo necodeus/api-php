@@ -8,6 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class DoctrineMigrationVersions
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(type: "integer")]
+    private $id;
+
     #[ORM\Column(name: "version", type: "string", length: 191, nullable: false)]
     private $version;
 
