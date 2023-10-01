@@ -31,7 +31,7 @@ class Database
 
     public function fetch($query, $params = []): array
     {
-        return $this->query($query, $params)->fetch(\PDO::FETCH_ASSOC);
+        return $this->query($query, $params)->fetch(\PDO::FETCH_ASSOC) ?: [];
     }
 
     public function insert(string $table, array $data): int

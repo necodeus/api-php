@@ -11,7 +11,10 @@ require_once __DIR__ . '/../storages/Database.php';
 $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     $domain = $_SERVER['HTTP_HOST'];
     if ($domain === 'common-api.necodeo.com' || $domain === 'common-api.localhost') {
-        require_once __DIR__ . '/../domains/common-api/Links/Controller.php';
+        require_once __DIR__ . '/../domains/common-api/Pages/Repository.php';
+        require_once __DIR__ . '/../domains/common-api/Pages/Controller.php';
+        require_once __DIR__ . '/../domains/common-api/Redirections/Repository.php';
+        require_once __DIR__ . '/../domains/common-api/Redirections/Controller.php';
         require_once __DIR__ . '/../domains/common-api/routes.php';
     } elseif ($domain === 'images.necodeo.com' || $domain === 'images.localhost') {
         require_once __DIR__ . '/../domains/images/Controller.php';

@@ -13,28 +13,35 @@ class Controller
         $this->repo = new Repository();
     }
 
-    public function index()
+    public function index(): void
     {
         $start = microtime(true);
         $posts = $this->repo->getPosts();
+        // $pages = $this->repo->getPagesByPostIds($posts->column('id')->all());
         $end = microtime(true);
 
         header('Content-Type: application/json');
         print json_encode([
             'status' => 'ok',
-            'posts' => $posts,
             'time' => $end - $start,
+            'posts' => $posts,
+            // 'pages' => $pages,
         ]);
     }
 
-    public function show(string $uuid)
+    public function single(string $id): void
     {
-        print_r($uuid);
+        $start = microtime(true);
+        $post = $this->repo->getPostById($id);
+        // $page = $this->repo->getPagesByPostIds([$post['id']])->first();
+        $end = microtime(true);
 
-        return [
+        header('Content-Type: application/json');
+        print json_encode([
             'status' => 'ok',
-            'post' => [],
-            'postPublisher' => [],
-        ];
+            'time' => $end - $start,
+            'post' => $post,
+            // 'page' => $page,
+        ]);
     }
 }

@@ -4,6 +4,8 @@ namespace PaperApi\Posts;
 
 use Storage\Database;
 
+use loophp\collection\Collection;
+
 class Repository
 {
     private Database $db;
@@ -19,40 +21,35 @@ class Repository
         );
     }
 
-    public function getPosts(): array
+    public function getPosts(): Collection
     {
-        $posts = $this->getContents();
-        $links = $this->getLinksByContentIds(array_column($posts, 'id'));
+        $prefix = 'http://images.localhost/';
 
-        foreach ($posts as &$post) {
-            foreach ($links as $link) {
-                if ($link['content_id'] === $post['id']) {
-                    $post['link'] = $link;
-                    break;
-                }
-            }
-        }
+        $query = "SELECT
+                *,
+                CONCAT(:prefix, main_image_id) AS main_image_url
+            FROM b_posts
+        ";
 
-        return $posts;
+        $result = $this->db->fetchAll($query, ['prefix' => $prefix]);
+
+        return Collection::fromIterable($result);
     }
 
-    public function getContents(): array
+    public function getPostById(string $id): array
     {
-        $contents = $this->db->fetchAll("SELECT * FROM nc_contents");
+        $prefix = 'http://images.localhost/';
 
-        foreach ($contents as &$value) {
-            $value['main_image_url'] = 'http://images.localhost/' . $value['image_id_main'];
-        }
+        $query = "SELECT
+                *,
+                CONCAT(:prefix, main_image_id) AS main_image_url
+            FROM b_posts
+            WHERE   
+                id = :id
+        ";
 
-        return $contents;
-    }
+        $result = $this->db->fetch($query, ['prefix' => $prefix, 'id' => $id]);
 
-    public function getLinksByContentIds(array $ids): array
-    {
-        $ids = array_map(function ($id) {
-            return "'{$id}'";
-        }, $ids);
-
-        return $this->db->fetchAll("SELECT * FROM nc_links WHERE content_id IN (" . implode(', ', $ids) . ")");
+        return $result;
     }
 }
