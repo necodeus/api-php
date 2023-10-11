@@ -2,46 +2,45 @@
 
 namespace Controllers\PaperApi;
 
+use Controllers\BaseController;
 use Repositories\PostRepository;
 
-class PostController
+class PostController extends BaseController
 {
     private PostRepository $repo;
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->repo = new PostRepository();
     }
 
     public function index(): void
     {
-        $start = microtime(true);
+        performance()::measure();
         $posts = $this->repo->getPosts();
-        // $pages = $this->repo->getPagesByPostIds($posts->column('id')->all());
-        $end = microtime(true);
+        performance()::measure();
 
         header('Content-Type: application/json');
         print json_encode([
             'status' => 'ok',
-            'time' => $end - $start,
+            'time' => performance()::result(),
             'posts' => $posts,
-            // 'pages' => $pages,
         ]);
     }
 
     public function single(string $id): void
     {
-        $start = microtime(true);
+        performance()::measure();
         $post = $this->repo->getPostById($id);
-        // $page = $this->repo->getPagesByPostIds([$post['id']])->first();
-        $end = microtime(true);
+        performance()::measure();
 
         header('Content-Type: application/json');
         print json_encode([
             'status' => 'ok',
-            'time' => $end - $start,
+            'time' => performance()::result(),
             'post' => $post,
-            // 'page' => $page,
         ]);
     }
 }

@@ -6,3 +6,5 @@ Przydatne polecenia:
 # Wczytywanie
 composer dump-autoload
 ```
+
+TEST

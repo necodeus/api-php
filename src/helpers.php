@@ -1,5 +1,12 @@
 <?php 
 
+use Debuggers\Performance;
+
+function performance(): Performance
+{
+    return new Performance();
+}
+
 function snake_to_pascalcase(string $array): string
 {
     return str_replace('_', '', ucwords($array, '_'));

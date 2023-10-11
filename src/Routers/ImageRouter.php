@@ -1,5 +1,5 @@
 <?php 
 
-use Controllers\Image\ImageController;
+use Controllers\Images\OutputController;
 
-$r->addRoute('GET', '/{id}[/]', ImageController::class . '@load');
+$r->addRoute('GET', '/{id}[/]', OutputController::class . '@load');
