@@ -1,12 +1,12 @@
 <?php 
 
-namespace CommonApi\Pages;
+namespace Repositories;
 
-use Storage\Database;
+use Services\Database;
 
 use loophp\collection\Collection;
 
-class Repository
+class PageRepository
 {
     private Database $db;
 

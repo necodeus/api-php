@@ -1,16 +1,16 @@
 <?php 
 
-namespace PaperApi\Posts;
+namespace Controllers\PaperApi;
 
-use PaperApi\Posts\Repository;
+use Repositories\PostRepository;
 
-class Controller
+class PostController
 {
-    private Repository $repo;
+    private PostRepository $repo;
 
     public function __construct()
     {
-        $this->repo = new Repository();
+        $this->repo = new PostRepository();
     }
 
     public function index(): void

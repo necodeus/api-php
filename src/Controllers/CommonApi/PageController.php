@@ -1,14 +1,16 @@
 <?php 
 
-namespace CommonApi\Pages;
+namespace Controllers\CommonApi;
 
-class Controller
+use Repositories\PageRepository;
+
+class PageController
 {
-    private Repository $repo;
+    private PageRepository $repo;
 
     public function __construct()
     {
-        $this->repo = new Repository();
+        $this->repo = new PageRepository();
     }
 
     public function single(): void

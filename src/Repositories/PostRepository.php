@@ -1,12 +1,12 @@
 <?php
 
-namespace PaperApi\Posts;
+namespace Repositories;
 
-use Storage\Database;
+use Services\Database;
 
 use loophp\collection\Collection;
 
-class Repository
+class PostRepository
 {
     private Database $db;
 

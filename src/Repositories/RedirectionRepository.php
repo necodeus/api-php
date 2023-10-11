@@ -1,10 +1,10 @@
 <?php 
 
-namespace CommonApi\Redirections;
+namespace Repositories;
 
-use Storage\Database;
+use Services\Database;
 
-class Repository
+class RedirectionRepository
 {
     private Database $db;
 

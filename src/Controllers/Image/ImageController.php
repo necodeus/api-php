@@ -1,8 +1,8 @@
 <?php 
 
-namespace Images;
+namespace Controllers\Image;
 
-class Controller
+class ImageController
 {
     public function load(string $id): void
     {

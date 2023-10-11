@@ -1,14 +1,16 @@
 <?php 
 
-namespace CommonApi\Redirections;
+namespace Controllers\CommonApi;
 
-class Controller
+use Repositories\RedirectionRepository;
+
+class RedirectionController
 {
-    private Repository $repo;
+    private RedirectionRepository $repo;
 
     public function __construct()
     {
-        $this->repo = new Repository();
+        $this->repo = new RedirectionRepository();
     }
 
     public function single(string $id): void

@@ -1,6 +1,6 @@
 <?php 
 
-namespace Storage;
+namespace Services;
 
 class Filesystem
 {
