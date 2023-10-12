@@ -1,5 +1,10 @@
 <?php 
 
+/**
+ * common-api.localhost
+ * common-api.necodeo.com
+ */
+
 use Controllers\CommonApi\PageController;
 use Controllers\CommonApi\RedirectionController;
 use Controllers\CommonApi\TestController;

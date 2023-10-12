@@ -2,29 +2,29 @@
 
 namespace Controllers\CommonApi;
 
-use Repositories\PageRepository;
+use Repositories\Common\PagesRepo;
 
 class PageController
 {
-    private PageRepository $repo;
+    private PagesRepo $repo;
 
     public function __construct()
     {
-        $this->repo = new PageRepository();
+        $this->repo = new PagesRepo();
     }
 
     public function single(): void
     {
         $slug = $_GET['slug'] ?? '';
 
-        $start = microtime(true);
+        performance()::measure();
         $pages = $this->repo->getPageBySlug($slug);
-        $end = microtime(true);
+        performance()::measure();
 
         header('Content-Type: application/json');
         print json_encode([
             'status' => 'ok',
-            'time' => $end - $start,
+            'time' => performance()::result(),
             'page' => $pages,
         ]);
     }

@@ -1,10 +1,10 @@
 <?php 
 
-namespace Repositories;
+namespace Repositories\Common;
 
 use Services\Database;
 
-class RedirectionRepository
+class CommonImagesRepo
 {
     private Database $db;
 
@@ -19,15 +19,13 @@ class RedirectionRepository
         );
     }
 
-    public function getRedirectionById(string $id): array
+    public function getImages(): array
     {
         $query = "SELECT *
-            FROM c_redirections
-            WHERE
-                id = :id
+            FROM c_images
         ";
 
-        $result = $this->db->fetch($query, ['id' => $id]);
+        $result = $this->db->fetchAll($query);
 
         return $result;
     }

@@ -9,19 +9,27 @@ $dotenv->load();
 $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     $domain = $_SERVER['HTTP_HOST'];
 
+    require_once __DIR__ . '/../src/Controllers/BaseController.php';
+
     if (preg_match('/^common-api\./', $domain)) {
+        require_once __DIR__ . '/../src/Controllers/CommonApi/PageController.php';
+        require_once __DIR__ . '/../src/Controllers/CommonApi/RedirectionController.php';
+        require_once __DIR__ . '/../src/Controllers/CommonApi/TestController.php';
         require_once __DIR__ . '/../src/Routers/CommonApiRouter.php';
     }
 
     if (preg_match('/^images\./', $domain)) {
+        require_once __DIR__ . '/../src/Controllers/Images/OutputController.php';
         require_once __DIR__ . '/../src/Routers/ImageRouter.php';
     }
 
     if (preg_match('/^paper-api\./', $domain)) {
+        require_once __DIR__ . '/../src/Controllers/PaperApi/PostController.php';
         require_once __DIR__ . '/../src/Routers/PaperApiRouter.php';
     }
 
     if (preg_match('/^admin-api\./', $domain)) {
+        require_once __DIR__ . '/../src/Controllers/AdminApi/DB/IndexController.php';
         require_once __DIR__ . '/../src/Routers/AdminApiRouter.php';
     }
 }, [

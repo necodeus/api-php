@@ -4,11 +4,11 @@ namespace Debuggers;
 
 class Performance
 {
-    private array $times = [];
+    protected array $times = [];
 
-    private static ?Performance $instance = null;
+    protected static ?Performance $instance = null;
 
-    public static function init()
+    protected static function init()
     {
         if (self::$instance === null) {
             self::$instance = new self();

@@ -3,17 +3,18 @@
 namespace Controllers\PaperApi;
 
 use Controllers\BaseController;
-use Repositories\PostRepository;
+
+use Repositories\Blog\BlogPostsRepo;
 
 class PostController extends BaseController
 {
-    private PostRepository $repo;
+    private BlogPostsRepo $repo;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->repo = new PostRepository();
+        $this->repo = new BlogPostsRepo();
     }
 
     public function index(): void

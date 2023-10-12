@@ -10,8 +10,8 @@
         "psr-4": {
             "Services\\": "src/Services/",
             "Repositories\\": "src/Repositories/",
-            "Controllers\\": "src/Controllers/",
-            "Debuggers\\": "src/Debuggers/"
+            "Debuggers\\": "src/Debuggers/",
+            "Responses\\": "src/Responses/"
         }
     }
 }

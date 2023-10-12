@@ -2,16 +2,18 @@
 
 namespace Controllers\Images;
 
+use Services\Filesystem;
+
 class OutputController
 {
-    public function load(string $id): void
+    public function load(string $id)
     {
-        if (!file_exists("../uploads/{$id}")) {
-            header("HTTP/1.1 404 Not Found");
-            return;
+        $file = Filesystem::load('../uploads', $id);
+
+        if ($file->exists() === false) {
+            return response()->status(404);
         }
 
-        header("Content-type: image/jpeg");
-        print file_get_contents("../uploads/{$id}");
+        return response($file->getContents())->status(200);
     }
 }

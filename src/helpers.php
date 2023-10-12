@@ -1,10 +1,16 @@
 <?php 
 
 use Debuggers\Performance;
+use Responses\Text;
 
 function performance(): Performance
 {
     return new Performance();
+}
+
+function response($data = ""): Text
+{
+    return new Text($data);
 }
 
 function snake_to_pascalcase(string $array): string
