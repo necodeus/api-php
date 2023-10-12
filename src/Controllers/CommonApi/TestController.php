@@ -2,19 +2,17 @@
 
 namespace Controllers\CommonApi;
 
-use Services\ElevenLabs;
+use Services\ElevenLabsApi;
+use Services\S3;
 
 class TestController
 {
     public function test()
     {
-        // $minio = new \Services\MinIO();
-        // $result = $minio->upload('hello');
+        $s3 = new S3();
+        $result = $s3->upload('hello', 'key', 'body');
+        print json_encode($result);
 
-        // print json_encode($result);
-
-        $text = "Siema, elo, cześć";
-        // $textHash = md5($text);
-        print ElevenLabs::textToSpeech($text);
+        // print ElevenLabsApi::textToSpeech("Siema, elo, cześć");
     }
 }

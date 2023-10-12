@@ -5,7 +5,7 @@ namespace Services;
 use Aws\S3\S3Client;
 use Aws\Result;
 
-class MinIO
+class S3
 {
   protected S3Client $client;
 
@@ -14,17 +14,17 @@ class MinIO
     $this->client = new S3Client([
       'version' => 'latest',
       'region' => 'us-east-1',
-      'endpoint' => "http://{$_ENV['MINIO_ENDPOINT']}:{$_ENV['MINIO_PORT']}",
+      'endpoint' => "http://{$_ENV['S3_ENDPOINT']}:{$_ENV['S3_PORT']}",
       'use_path_style_endpoint' => true,
       'credentials' => [
-        'key' => $_ENV['MINIO_ACCESS_KEY'],
-        'secret' => $_ENV['MINIO_SECRET_KEY'],
+        'key' => $_ENV['S3_ACCESS_KEY'],
+        'secret' => $_ENV['S3_SECRET_KEY'],
       ],
     ]);
   }
 
   /**
-   * Download a file from MinIO
+   * Download a file from S3
    * 
    * @return Result
    */
@@ -38,16 +38,16 @@ class MinIO
   }
 
   /**
-   * Upload a file to MinIO
+   * Upload a file to S3
    * 
    * @return Result
    */
-  public function upload(string $bucket): Result
+  public function upload(string $bucket, string $key, string $body): Result
   {
     return $this->client->putObject([
       'Bucket' => $bucket,
-      'Key' => "hell.txt",
-      'Body' => "HELLO",
+      'Key' => $key,
+      'Body' => $body,
     ]);
   }
 }

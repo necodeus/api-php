@@ -2,7 +2,7 @@
 
 namespace Services;
 
-class ElevenLabs
+class ElevenLabsApi
 {
     /**
      * Convert text to speech
