@@ -16,4 +16,16 @@ class ShopParcelLockersRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countParcelLockers(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_parcel_lockers
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

@@ -16,4 +16,16 @@ class CommonContentsRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countContents(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM c_contents
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

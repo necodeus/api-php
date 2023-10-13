@@ -42,4 +42,16 @@ class CommonRedirectionsRepo
 
         return $result;
     }
+
+    public function countRedirections(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM c_redirections
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

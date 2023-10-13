@@ -29,4 +29,16 @@ class CommonSettingGroupsRepo
 
         return $result;
     }
+
+    public function countSettingGroups(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM c_setting_groups
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

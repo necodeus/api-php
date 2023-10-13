@@ -16,4 +16,16 @@ class ShopProductCategoriesRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countProductCategories(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_product_categories
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

@@ -29,4 +29,16 @@ class CommonNavigationTreeRepo
 
         return $result;
     }
+
+    public function countNavigationTree(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM c_navigation_tree
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

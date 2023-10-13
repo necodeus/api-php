@@ -6,3 +6,8 @@
 
 # MinIO - S3 storage for local development
 /minio/
+
+# Cache directory
+/cache/
+
+!.gitkeep

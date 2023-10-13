@@ -16,4 +16,16 @@ class ShopInvoicesRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countInvoices(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_invoices
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

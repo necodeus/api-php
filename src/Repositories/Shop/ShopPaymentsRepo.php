@@ -16,4 +16,16 @@ class ShopPaymentsRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countPayments(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_payments
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

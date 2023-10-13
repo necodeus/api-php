@@ -16,4 +16,16 @@ class UserSessionsRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countSessions(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM u_sessions
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

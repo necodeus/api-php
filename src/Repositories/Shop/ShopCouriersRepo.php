@@ -16,4 +16,16 @@ class ShopCouriersRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countCouriers(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_couriers
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

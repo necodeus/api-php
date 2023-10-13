@@ -29,4 +29,16 @@ class CommonSettingItemsRepo
 
         return $result;
     }
+
+    public function countSettingItems(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM c_setting_items
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

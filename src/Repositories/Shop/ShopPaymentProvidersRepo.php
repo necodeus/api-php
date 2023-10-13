@@ -16,4 +16,16 @@ class ShopPaymentProvidersRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countPaymentProviders(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_payment_providers
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

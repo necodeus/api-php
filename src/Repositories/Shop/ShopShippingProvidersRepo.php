@@ -16,4 +16,16 @@ class ShopShippingProvidersRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countShippingProviders(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_shipping_providers
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

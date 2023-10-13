@@ -16,4 +16,16 @@ class CommonFragmentsRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countFragments(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM c_fragments
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

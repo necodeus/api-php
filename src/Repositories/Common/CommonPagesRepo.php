@@ -42,4 +42,16 @@ class CommonPagesRepo
 
         return $result;
     }
+
+    public function countPages(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM c_pages
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

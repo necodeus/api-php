@@ -16,4 +16,16 @@ class ShopDiscountTypesRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countDiscountTypes(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_discount_types
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

@@ -33,4 +33,16 @@ class BlogCategoriesRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countCategories(): int
+    {
+        $query = "SELECT
+                COUNT(*) AS count
+            FROM b_categories
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

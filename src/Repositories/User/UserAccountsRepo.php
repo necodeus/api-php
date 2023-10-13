@@ -16,4 +16,16 @@ class UserAccountsRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countAccounts(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM u_accounts
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

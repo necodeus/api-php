@@ -16,4 +16,16 @@ class UserAuthorizationsRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countAuthorizations(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM u_authorizations
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

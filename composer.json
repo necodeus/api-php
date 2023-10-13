@@ -11,7 +11,8 @@
             "Services\\": "src/Services/",
             "Repositories\\": "src/Repositories/",
             "Debuggers\\": "src/Debuggers/",
-            "Responses\\": "src/Responses/"
+            "Responses\\": "src/Responses/",
+            "Libraries\\": "src/Libraries/"
         }
     }
 }

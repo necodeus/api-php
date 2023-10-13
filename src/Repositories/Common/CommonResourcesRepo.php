@@ -29,4 +29,16 @@ class CommonResourcesRepo
 
         return $result;
     }
+
+    public function countResources(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM c_resources
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

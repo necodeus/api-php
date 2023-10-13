@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 require_once __DIR__ . '/../src/helpers.php';
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -29,7 +29,7 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     }
 
     if (preg_match('/^admin-api\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/AdminApi/DB/IndexController.php';
+        require_once __DIR__ . '/../src/Controllers/AdminApi/Schemas/IndexController.php';
         require_once __DIR__ . '/../src/Routers/AdminApiRouter.php';
     }
 }, [

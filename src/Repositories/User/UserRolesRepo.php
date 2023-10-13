@@ -16,4 +16,16 @@ class UserRolesRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countRoles(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM u_roles
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

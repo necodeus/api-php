@@ -16,4 +16,16 @@ class ForumCategoryTreeRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countCategoryTree(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM f_category_tree
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

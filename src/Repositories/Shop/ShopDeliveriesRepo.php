@@ -16,4 +16,16 @@ class ShopDeliveriesRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countDeliveries(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_deliveries
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

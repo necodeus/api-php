@@ -16,4 +16,16 @@ class ShopOrdersRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countOrders(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_orders
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

@@ -33,4 +33,16 @@ class BlogTagsRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countTags(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM b_tags
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

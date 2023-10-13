@@ -29,4 +29,16 @@ class CommonImagesRepo
 
         return $result;
     }
+
+    public function countImages(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM c_images
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

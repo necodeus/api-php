@@ -29,4 +29,16 @@ class CommonNavigationsRepo
 
         return $result;
     }
+
+    public function countNavigations(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM c_navigations
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

@@ -16,4 +16,16 @@ class ShopReviewsRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countReviews(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_reviews
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

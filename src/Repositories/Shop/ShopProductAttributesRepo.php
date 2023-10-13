@@ -16,4 +16,16 @@ class ShopProductAttributesRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countProductAttributes(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_product_attributes
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

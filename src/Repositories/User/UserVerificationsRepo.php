@@ -16,4 +16,16 @@ class UserVerificationsRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countVerifications(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM u_verifications
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

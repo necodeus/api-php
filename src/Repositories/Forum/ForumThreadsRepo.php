@@ -16,4 +16,16 @@ class ForumThreadsRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countThreads(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM f_threads
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

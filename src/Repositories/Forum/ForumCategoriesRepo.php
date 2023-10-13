@@ -16,4 +16,16 @@ class ForumCategoriesRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countCategories(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM f_categories
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

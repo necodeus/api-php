@@ -16,4 +16,16 @@ class ShopShipmentsRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countShipments(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_shipments
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

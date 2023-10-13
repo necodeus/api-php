@@ -16,4 +16,16 @@ class ShopComplaintsRepo extends BaseRepository
 
         return $result;
     }
+
+    public function countComplaints(): int
+    {
+        $query = "SELECT
+                COUNT(*) as count
+            FROM s_complaints
+        ";
+
+        $result = $this->db->fetch($query);
+
+        return $result['count'];
+    }
 }

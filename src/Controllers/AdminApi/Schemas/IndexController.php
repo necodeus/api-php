@@ -1,9 +1,9 @@
-<?php 
+<?php
 
-namespace Controllers\AdminApi\DB;
+namespace Controllers\AdminApi\Schemas;
 
 use Controllers\BaseController;
-
+use Libraries\Cache;
 use Repositories\Blog\BlogCategoriesRepo;
 use Repositories\Blog\BlogCommentsRepo;
 use Repositories\Blog\BlogPostsRepo;
@@ -108,10 +108,10 @@ class IndexController extends BaseController
     private UserSessionsRepo $u_sessions;
     private UserVerificationsRepo $u_verifications;
 
-    public function index(string $type): void
+    public function index(string $schema): void
     {
         performance()::measure();
-        switch ($type) {
+        switch ($schema) {
             case 'b_categories':
                 $this->b_categories = new BlogCategoriesRepo();
                 $all = $this->b_categories->getCategories();
@@ -299,6 +299,120 @@ class IndexController extends BaseController
             'status' => 'ok',
             'time' => performance()::result(),
             'all' => $all,
+        ]);
+    }
+
+    /**
+     * Returns number of record in each table.
+     */
+    public function stats()
+    {
+        performance()::measure();
+        $cache = new Cache();
+        $response = $cache->get('AdminApi_Schemas_Stats');
+
+        if (empty($response)) {
+            $this->b_categories = new BlogCategoriesRepo();
+            $this->b_comments = new BlogCommentsRepo();
+            $this->b_posts = new BlogPostsRepo();
+            $this->b_tags = new BlogTagsRepo();
+            $this->c_contents = new CommonContentsRepo();
+            $this->c_contents_fragments = new CommonContentsFragmentsRepo();
+            $this->c_fragments = new CommonFragmentsRepo();
+            $this->c_images = new CommonImagesRepo();
+            $this->c_navigation_tree = new CommonNavigationTreeRepo();
+            $this->c_navigations = new CommonNavigationsRepo();
+            $this->c_pages = new CommonPagesRepo();
+            $this->c_redirections = new CommonRedirectionsRepo();
+            $this->c_resources = new CommonResourcesRepo();
+            $this->c_setting_groups = new CommonSettingGroupsRepo();
+            $this->c_setting_items = new CommonSettingItemsRepo();
+            $this->f_categories = new ForumCategoriesRepo();
+            $this->f_category_tree = new ForumCategoryTreeRepo();
+            $this->f_posts = new ForumPostsRepo();
+            $this->f_threads = new ForumThreadsRepo();
+            $this->s_complaints = new ShopComplaintsRepo();
+            $this->s_coupons = new ShopCouponsRepo();
+            $this->s_couriers = new ShopCouriersRepo();
+            $this->s_deliveries = new ShopDeliveriesRepo();
+            $this->s_discount_types = new ShopDiscountTypesRepo();
+            $this->s_invoices = new ShopInvoicesRepo();
+            $this->s_order_products = new ShopOrderProductsRepo();
+            $this->s_orders = new ShopOrdersRepo();
+            $this->s_parcel_lockers = new ShopParcelLockersRepo();
+            $this->s_payment_providers = new ShopPaymentProvidersRepo();
+            $this->s_payments = new ShopPaymentsRepo();
+            $this->s_product_attributes = new ShopProductAttributesRepo();
+            $this->s_product_categories = new ShopProductCategoriesRepo();
+            $this->s_products = new ShopProductsRepo();
+            $this->s_returns = new ShopReturnsRepo();
+            $this->s_reviews = new ShopReviewsRepo();
+            $this->s_shipments = new ShopShipmentsRepo();
+            $this->s_shipping_providers = new ShopShippingProvidersRepo();
+            $this->s_streets = new ShopStreetsRepo();
+            $this->u_accounts = new UserAccountsRepo();
+            $this->u_authorizations = new UserAuthorizationsRepo();
+            $this->u_profiles = new UserProfilesRepo();
+            $this->u_roles = new UserRolesRepo();
+            $this->u_sessions = new UserSessionsRepo();
+            $this->u_verifications = new UserVerificationsRepo();
+
+            $response = [
+                'b_categories' => $this->b_categories->countCategories(),
+                'b_comments' => $this->b_comments->countComments(),
+                'b_posts' => $this->b_posts->countPosts(),
+                'b_tags' => $this->b_tags->countTags(),
+                'c_contents' => $this->c_contents->countContents(),
+                'c_contents_fragments' => $this->c_contents_fragments->countContentsFragments(),
+                'c_fragments' => $this->c_fragments->countFragments(),
+                'c_images' => $this->c_images->countImages(),
+                'c_navigation_tree' => $this->c_navigation_tree->countNavigationTree(),
+                'c_navigations' => $this->c_navigations->countNavigations(),
+                'c_pages' => $this->c_pages->countPages(),
+                'c_redirections' => $this->c_redirections->countRedirections(),
+                'c_resources' => $this->c_resources->countResources(),
+                'c_setting_groups' => $this->c_setting_groups->countSettingGroups(),
+                'c_setting_items' => $this->c_setting_items->countSettingItems(),
+                'f_categories' => $this->f_categories->countCategories(),
+                'f_category_tree' => $this->f_category_tree->countCategoryTree(),
+                'f_posts' => $this->f_posts->countPosts(),
+                'f_threads' => $this->f_threads->countThreads(),
+                's_complaints' => $this->s_complaints->countComplaints(),
+                's_coupons' => $this->s_coupons->countCoupons(),
+                's_couriers' => $this->s_couriers->countCouriers(),
+                's_deliveries' => $this->s_deliveries->countDeliveries(),
+                's_discount_types' => $this->s_discount_types->countDiscountTypes(),
+                's_invoices' => $this->s_invoices->countInvoices(),
+                's_order_products' => $this->s_order_products->countOrderProducts(),
+                's_orders' => $this->s_orders->countOrders(),
+                's_parcel_lockers' => $this->s_parcel_lockers->countParcelLockers(),
+                's_payment_providers' => $this->s_payment_providers->countPaymentProviders(),
+                's_payments' => $this->s_payments->countPayments(),
+                's_product_attributes' => $this->s_product_attributes->countProductAttributes(),
+                's_product_categories' => $this->s_product_categories->countProductCategories(),
+                's_products' => $this->s_products->countProducts(),
+                's_returns' => $this->s_returns->countReturns(),
+                's_reviews' => $this->s_reviews->countReviews(),
+                's_shipments' => $this->s_shipments->countShipments(),
+                's_shipping_providers' => $this->s_shipping_providers->countShippingProviders(),
+                's_streets' => $this->s_streets->countStreets(),
+                'u_accounts' => $this->u_accounts->countAccounts(),
+                'u_authorizations' => $this->u_authorizations->countAuthorizations(),
+                'u_profiles' => $this->u_profiles->countProfiles(),
+                'u_roles' => $this->u_roles->countRoles(),
+                'u_sessions' => $this->u_sessions->countSessions(),
+                'u_verifications' => $this->u_verifications->countVerifications(),
+            ];
+
+            $cache->set('AdminApi_Schemas_Stats', $response, 60);
+        }
+        performance()::measure();
+
+        @header('Content-Type: application/json');
+        print json_encode([
+            'status' => 'ok',
+            'time' => performance()::result(),
+            'all' => $response,
         ]);
     }
 }
