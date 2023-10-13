@@ -8,3 +8,5 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Git
 RUN apk add git
+
+CMD ["sh", "-c", "composer install; php-fpm"]

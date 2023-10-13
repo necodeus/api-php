@@ -1,8 +1,38 @@
 version: "3"
 
+# docker exec -it api-php composer install
+
 services:
-  minio:
-    build: .
+  nginx.latest:
+    container_name: http-server
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    volumes:
+      - ./.docker-config/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www/html
+      - vendor:/var/www/html/vendor
+    ports:
+      - "80:80"
+    networks:
+      - necodeo
+  php.82:
+    container_name: application
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    volumes:
+      - .:/var/www/html
+      - vendor:/var/www/html/vendor
+    ports:
+      - "9000:9000"
+    networks:
+      - necodeo
+  minio.latest:
+    container_name: s3-server
+    build:
+      context: .
+      dockerfile: Dockerfile.minio
     volumes:
       - ./minio/data:/data
       - ./minio/config:/root/.minio
@@ -13,12 +43,10 @@ services:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin
     networks:
-      - frontend
-      - backend
-
+      - necodeo
 networks:
-  frontend:
-  backend:
+  necodeo:
 
 volumes:
   minio:
+  vendor:
