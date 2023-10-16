@@ -1,23 +1,29 @@
-<?php 
+<?php
 
 namespace Repositories\User;
 
+use Repositories\BaseRepositoryInterface;
 use Repositories\BaseRepository;
 
-class UserProfilesRepo extends BaseRepository
+use loophp\collection\Collection;
+
+class UserProfilesRepo extends BaseRepository implements BaseRepositoryInterface
 {
-    public function getProfiles(): array
+    public function getAll(int $page = 1, int $limit = 10): Collection
     {
+        $offset = ($page - 1) * $limit;
+
         $query = "SELECT *
             FROM u_profiles
+            LIMIT $limit OFFSET $offset
         ";
 
         $result = $this->db->fetchAll($query);
 
-        return $result;
+        return Collection::fromIterable($result);
     }
 
-    public function countProfiles(): int
+    public function count(): int
     {
         $query = "SELECT
                 COUNT(*) as count

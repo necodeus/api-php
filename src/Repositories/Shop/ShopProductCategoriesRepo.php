@@ -1,23 +1,29 @@
-<?php 
+<?php
 
 namespace Repositories\Shop;
 
+use Repositories\BaseRepositoryInterface;
 use Repositories\BaseRepository;
 
-class ShopProductCategoriesRepo extends BaseRepository
+use loophp\collection\Collection;
+
+class ShopProductCategoriesRepo extends BaseRepository implements BaseRepositoryInterface
 {
-    public function getProductCategories(): array
+    public function getAll(int $page = 1, int $limit = 10): Collection
     {
+        $offset = ($page - 1) * $limit;
+
         $query = "SELECT *
             FROM s_product_categories
+            LIMIT $limit OFFSET $offset
         ";
 
         $result = $this->db->fetchAll($query);
 
-        return $result;
+        return Collection::fromIterable($result);
     }
 
-    public function countProductCategories(): int
+    public function count(): int
     {
         $query = "SELECT
                 COUNT(*) as count

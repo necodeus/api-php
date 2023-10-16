@@ -6,6 +6,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
+header("Access-Control-Allow-Origin: *");
+
 $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     $domain = $_SERVER['HTTP_HOST'];
 

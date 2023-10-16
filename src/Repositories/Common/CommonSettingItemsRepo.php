@@ -1,36 +1,29 @@
-<?php 
+<?php
 
 namespace Repositories\Common;
 
-use Services\Database;
+use Repositories\BaseRepositoryInterface;
+use Repositories\BaseRepository;
 
-class CommonSettingItemsRepo
+use loophp\collection\Collection;
+
+class CommonSettingItemsRepo extends BaseRepository implements BaseRepositoryInterface
 {
-    private Database $db;
-
-    public function __construct()
+    public function getAll(int $page = 1, int $limit = 10): Collection
     {
-        $this->db = new Database(
-            $_ENV['DATABASE_HOST'],
-            $_ENV['DATABASE_PORT'],
-            $_ENV['DATABASE_USER'],
-            $_ENV['DATABASE_PASSWORD'],
-            $_ENV['DATABASE_NAME'],
-        );
-    }
+        $offset = ($page - 1) * $limit;
 
-    public function getSettingItems(): array
-    {
         $query = "SELECT *
             FROM c_setting_items
+            LIMIT $limit OFFSET $offset
         ";
 
         $result = $this->db->fetchAll($query);
 
-        return $result;
+        return Collection::fromIterable($result);
     }
 
-    public function countSettingItems(): int
+    public function count(): int
     {
         $query = "SELECT
                 COUNT(*) as count

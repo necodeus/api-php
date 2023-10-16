@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Services;
 
@@ -8,7 +8,14 @@ class Database
 
     public function __construct(string $ip, string $port, string $user, string $password, string $database)
     {
-        $this->db = new \PDO("mysql:host={$ip}:{$port};dbname={$database}", $user, $password);
+        $this->db = new \PDO(
+            "mysql:host={$ip}:{$port};dbname={$database}",
+            $user,
+            $password,
+            [
+                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
+            ]
+        );
     }
 
     protected function query($query, $params = []): \PDOStatement

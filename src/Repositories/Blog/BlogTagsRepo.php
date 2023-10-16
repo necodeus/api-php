@@ -1,18 +1,21 @@
-<?php 
+<?php
 
 namespace Repositories\Blog;
 
+use Repositories\BaseRepositoryInterface;
 use Repositories\BaseRepository;
 
 use loophp\collection\Collection;
 
-class BlogTagsRepo extends BaseRepository
+class BlogTagsRepo extends BaseRepository implements BaseRepositoryInterface
 {
-    public function getTags(): Collection
+    public function getAll(int $page = 1, int $limit = 10): Collection
     {
-        $query = "SELECT
-                *
+        $offset = ($page - 1) * $limit;
+
+        $query = "SELECT *
             FROM b_tags
+            LIMIT $limit OFFSET $offset
         ";
 
         $result = $this->db->fetchAll($query);
@@ -25,7 +28,7 @@ class BlogTagsRepo extends BaseRepository
         $query = "SELECT
                 *
             FROM b_tags
-            WHERE   
+            WHERE
                 id = :id
         ";
 
@@ -34,7 +37,7 @@ class BlogTagsRepo extends BaseRepository
         return $result;
     }
 
-    public function countTags(): int
+    public function count(): int
     {
         $query = "SELECT
                 COUNT(*) as count

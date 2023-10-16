@@ -1,23 +1,29 @@
-<?php 
+<?php
 
 namespace Repositories\Common;
 
+use Repositories\BaseRepositoryInterface;
 use Repositories\BaseRepository;
 
-class CommonContentsFragmentsRepo extends BaseRepository
+use loophp\collection\Collection;
+
+class CommonContentsFragmentsRepo extends BaseRepository implements BaseRepositoryInterface
 {
-    public function getContentsFragments(): array
+    public function getAll(int $page = 1, int $limit = 10): Collection
     {
+        $offset = ($page - 1) * $limit;
+
         $query = "SELECT *
             FROM c_contents_fragments
+            LIMIT $limit OFFSET $offset
         ";
 
         $result = $this->db->fetchAll($query);
 
-        return $result;
+        return Collection::fromIterable($result);
     }
 
-    public function countContentsFragments(): int
+    public function count(): int
     {
         $query = "SELECT
                 COUNT(*) as count

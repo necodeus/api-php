@@ -1,7 +1,5 @@
 version: "3"
 
-# docker exec -it api-php composer install
-
 services:
   nginx.latest:
     container_name: http-server

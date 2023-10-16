@@ -1,18 +1,21 @@
-<?php 
+<?php
 
 namespace Repositories\Blog;
 
+use Repositories\BaseRepositoryInterface;
 use Repositories\BaseRepository;
 
 use loophp\collection\Collection;
 
-class BlogCommentsRepo extends BaseRepository
+class BlogCommentsRepo extends BaseRepository implements BaseRepositoryInterface
 {
-    public function getComments(): Collection
+    public function getAll(int $page = 1, int $limit = 10): Collection
     {
-        $query = "SELECT
-                *
+        $offset = ($page - 1) * $limit;
+
+        $query = "SELECT *
             FROM b_comments
+            LIMIT $limit OFFSET $offset
         ";
 
         $result = $this->db->fetchAll($query);
@@ -25,7 +28,7 @@ class BlogCommentsRepo extends BaseRepository
         $query = "SELECT
                 *
             FROM b_comments
-            WHERE   
+            WHERE
                 id = :id
         ";
 
@@ -34,7 +37,7 @@ class BlogCommentsRepo extends BaseRepository
         return $result;
     }
 
-    public function countComments(): int
+    public function count(): int
     {
         $query = "SELECT
                 COUNT(*) as count

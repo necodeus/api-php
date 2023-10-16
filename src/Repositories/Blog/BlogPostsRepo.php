@@ -2,23 +2,24 @@
 
 namespace Repositories\Blog;
 
+use Repositories\BaseRepositoryInterface;
 use Repositories\BaseRepository;
 
 use loophp\collection\Collection;
 
-class BlogPostsRepo extends BaseRepository
+class BlogPostsRepo extends BaseRepository implements BaseRepositoryInterface
 {
-    public function getPosts(): Collection
+    public function getAll(int $page = 1, int $limit = 10): Collection
     {
-        $prefix = 'http://images.localhost/';
+        $offset = ($page - 1) * $limit;
 
-        $query = "SELECT
-                *,
-                CONCAT(:prefix, main_image_id) AS main_image_url
+        $query = "SELECT *,
+                CONCAT('http://images.localhost/', main_image_id) AS main_image_url
             FROM b_posts
+            LIMIT $limit OFFSET $offset
         ";
 
-        $result = $this->db->fetchAll($query, ['prefix' => $prefix]);
+        $result = $this->db->fetchAll($query);
 
         return Collection::fromIterable($result);
     }
@@ -31,7 +32,7 @@ class BlogPostsRepo extends BaseRepository
                 *,
                 CONCAT(:prefix, main_image_id) AS main_image_url
             FROM b_posts
-            WHERE   
+            WHERE
                 id = :id
         ";
 
@@ -40,7 +41,7 @@ class BlogPostsRepo extends BaseRepository
         return $result;
     }
 
-    public function countPosts(): int
+    public function count(): int
     {
         $query = "SELECT
                 COUNT(*) as count

@@ -1,23 +1,29 @@
-<?php 
+<?php
 
 namespace Repositories\Shop;
 
+use Repositories\BaseRepositoryInterface;
 use Repositories\BaseRepository;
 
-class ShopOrdersRepo extends BaseRepository
+use loophp\collection\Collection;
+
+class ShopOrdersRepo extends BaseRepository implements BaseRepositoryInterface
 {
-    public function getOrders(): array
+    public function getAll(int $page = 1, int $limit = 10): Collection
     {
+        $offset = ($page - 1) * $limit;
+
         $query = "SELECT *
             FROM s_orders
+            LIMIT $limit OFFSET $offset
         ";
 
         $result = $this->db->fetchAll($query);
 
-        return $result;
+        return Collection::fromIterable($result);
     }
 
-    public function countOrders(): int
+    public function count(): int
     {
         $query = "SELECT
                 COUNT(*) as count
