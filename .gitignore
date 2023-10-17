@@ -7,7 +7,11 @@
 # MinIO - S3 storage for local development
 /minio/
 
-# Cache directory
+# Cache
 /cache/
+
+# PHP Unit
+/.phpunit.result.cache
+/public/coverage/
 
 !.gitkeep

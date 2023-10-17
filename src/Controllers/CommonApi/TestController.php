@@ -9,10 +9,10 @@ class TestController
 {
     public function test()
     {
-        $s3 = new S3();
-        $result = $s3->upload('hello', 'key', 'body');
-        print json_encode($result);
+        // $s3 = new S3();
+        // $result = $s3->upload('hello', 'key', 'body');
+        // print json_encode($result);
 
-        // print ElevenLabsApi::textToSpeech("Siema, elo, cześć");
+        print ElevenLabsApi::getHistory();
     }
 }

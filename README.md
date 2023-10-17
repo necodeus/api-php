@@ -1,6 +1,6 @@
 # API
 
-Web API for the applications.
+Web API for my apps.
 
 ## Development
 
@@ -10,11 +10,15 @@ Web API for the applications.
 docker compose up
 ```
 
-### How to add a new namespace
-
-- add the namespace to `composer.json`
-- run the following command to update the autoloader:
+### Composer
 
 ```bash
-composer dump-autoload
+# Rebuild the autoload file
+composer run-script autoload
+
+# Run the tests
+composer run-script test
+
+# Run the tests with coverage
+composer run-script coverage
 ```

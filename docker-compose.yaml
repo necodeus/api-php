@@ -45,6 +45,9 @@ services:
 networks:
   necodeo:
 
+# extra_hosts:
+#   - "host.docker.internal:host-gateway"
+
 volumes:
   minio:
   vendor:
