@@ -4,94 +4,142 @@ namespace Controllers\PaperApi;
 
 use Controllers\BaseController;
 use Repositories\Blog\BlogPostRatingsRepo;
+use Repositories\Blog\BlogPostRatingsSummaryRepo;
+use Predis\Client as RedisClient;
 
 class PostRatingController extends BaseController
 {
-    protected $filePath = 'rating.json';
+    protected RedisClient $redis;
 
-    protected BlogPostRatingsRepo $repo;
+    protected BlogPostRatingsRepo $ratings;
+
+    protected BlogPostRatingsSummaryRepo $ratingsSummary;
 
     public function __construct()
     {
-        $this->createJsonIfNotExists($this->filePath);
-        $this->repo = new BlogPostRatingsRepo();
+        $this->redis = new RedisClient([
+            'scheme' => 'tcp',
+            'host' => 'redis',
+            'port' => 6379
+        ]);
+        $this->ratings = new BlogPostRatingsRepo();
+        $this->ratingsSummary = new BlogPostRatingsSummaryRepo();
     }
 
-    protected function createJsonIfNotExists(string $filePath): void
+    protected function calculateNewAverage(float $averageRating, int $ratingsCount, int $userRating): float
     {
-        if (!file_exists($filePath)) {
-            file_put_contents($filePath, json_encode([]));
-        }
+        return ($averageRating * $ratingsCount + $userRating) / ($ratingsCount + 1);
     }
 
-    protected function calculateNewAverage(float $averageRating, int $ratings, int $userRating): float
-    {
-        return ($averageRating * $ratings + $userRating) / ($ratings + 1);
-    }
-
-    protected function getPostRatingsFromFile(): array
-    {
-        return json_decode(file_get_contents($this->filePath), true);
-    }
-
-    protected function savePostRatingsToFile(array $ratings, int $postId, float $newAverage, int $numberOfRatings): array
-    {
-        $ratings[$postId] = [
-            'average' => $newAverage,
-            'count' => ($numberOfRatings + 1) ?? 1,
-        ];
-
-        file_put_contents($this->filePath, json_encode($ratings));
-
-        return $ratings[$postId];
-    }
-
-    /**
-     * Ocena wpisu
-     */
     public function rate(int $id)
     {
-        $userRating = $_GET['userRating'] ?? null;
+        // pobranie danych
+        $current = $_GET['userRating'] ?? null;
+        $userIP = $_SERVER['REMOTE_ADDR'];
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $userHash = md5($userIP . $userAgent);
 
-        if (!$id || !$userRating) {
+        // walidacja
+        if (!is_numeric($current) || $current < 1 || $current > 5) {
             return response([
                 'status' => 'error',
-                'message' => 'Missing required parameters',
+                'message' => 'Invalid rating value',
             ])->status(400);
         }
 
-        $ratings = $this->getPostRatingsFromFile();
+        // pobranei poprzedniej oceny
+        $previous = $this->redis_getRating($userHash, $id) ?? $this->ratings->findRating($userHash, $id);
 
-        $rating = $ratings[$id] ?? null;
+        if ($previous == $current) {
+            // jeżeli ocena się nie zmieniła, to zwracamy błąd
+            return response([
+                'status' => 'error',
+                'message' => 'You have already rated this post',
+            ])->status(400);
+        }
 
-        $newAverage = $this->calculateNewAverage($rating['average'] ?? 0, $rating['count'] ?? 0, $userRating);
+        // zapisanie nowej oceny
+        $this->redis->set("rating:$userHash:$id", $current);
 
-        $rating = $this->savePostRatingsToFile($ratings, $id, $newAverage, $rating['count'] ?? 0);
-
-        $this->repo->upsert([
-            'post_id' => $id,
-            'average_rating' => $rating['average'],
-            'number_of_ratings' => $rating['count'],
-        ]);
+        // aktualizacja podsumowania
+        $updatedRating = $this->redis_updateSummary($id, $previous, $current);
 
         return response([
             'status' => 'ok',
             'message' => 'Post rated successfully',
+            'rating' => $updatedRating,
+        ])->status(200);
+    }
+
+    protected function redis_getRating(string $userHash, int $postId): ?float
+    {
+        return $this->redis->get("rating:$userHash:$postId");
+    }
+
+    public function single(int $id)
+    {
+        $rating = $this->redis->hget('blog_post_ratings', $id);
+
+        if ($rating) {
+            $rating = json_decode($rating);
+        }
+
+        return response([
+            'status' => 'ok',
+            'message' => 'Rating found',
             'rating' => $rating,
         ])->status(200);
     }
 
-    /**
-     * Aktualizacja ocen wpisów w bazie danych. Uruchamiana przez CRON
-     */
-    public function sync(): void
+    protected function redis_updateSummary(string $postId, int $previous = null, int $current): array
     {
-        foreach ($this->getPostRatingsFromFile() as $postId => $localRating) {
-            $this->repo->upsert([
-                'post_id' => $postId,
-                'average_rating' => $localRating['average'],
-                'number_of_ratings' => $localRating['count'],
-            ]);
+        $summary = $this->redis->hget('blog_post_ratings', $postId);
+
+        // jeżeli istnieje podsumowanie, to aktualizujemy je
+        if ($summary) {
+            $summary = json_decode($summary, true);
+
+            if ($previous !== null) {
+                $total = ($summary['average'] * $summary['count']) + $current - $previous;
+                $count = $summary['count'];
+            } else {
+                $total = ($summary['average'] * $summary['count']) + $current;
+                $count = $summary['count'] + 1;
+            }
+
+            $summary = [
+                'average' => $total / $count,
+                'count' => $count,
+            ];
+        } else {
+            $summary = [
+                'average' => $current,
+                'count' => 1,
+            ];
         }
+
+        $this->redis->hset('blog_post_ratings', $postId, json_encode($summary));
+
+        return $summary;
+    }
+
+    public function clear(): void
+    {
+        $allRatingKeys = $this->redis->keys('rating:*');
+
+        foreach ($allRatingKeys as $key) {
+            $this->redis->del($key);
+        }
+
+        $allSummaryKeys = $this->redis->keys('blog_post_ratings');
+
+        foreach ($allSummaryKeys as $key) {
+            $this->redis->del($key);
+        }
+
+        response([
+            'status' => 'ok',
+            'message' => 'Cache reset successfully',
+        ])->status(200);
     }
 }

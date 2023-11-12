@@ -7,6 +7,9 @@ build-nginx:
 build-minio:
 	docker build -f ./Dockerfile.minio -t api-minio:latest .
 
+build-redis:
+	docker build -f ./Dockerfile.redis -t api-redis:latest .
+
 build-all: build-php build-nginx
 
 push:

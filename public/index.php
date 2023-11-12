@@ -6,6 +6,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
+Predis\Autoloader::register();
+
 header("Access-Control-Allow-Origin: *");
 
 $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
@@ -26,6 +28,7 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     }
 
     if (preg_match('/^paper-api\./', $domain)) {
+        require_once __DIR__ . '/../src/Controllers/PaperApi/TestController.php';
         require_once __DIR__ . '/../src/Controllers/PaperApi/PostController.php';
         require_once __DIR__ . '/../src/Controllers/PaperApi/PostRatingController.php';
         require_once __DIR__ . '/../src/Routers/PaperApiRouter.php';

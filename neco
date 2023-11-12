@@ -1,0 +1,48 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+require_once 'src/helpers.php';
+require_once 'src/Libraries/Color.php';
+require_once 'src/Commands/BaseCommand.php';
+require_once 'src/Commands/RatingsSyncCommand.php';
+require_once 'src/Commands/RatingsSyncBackCommand.php';
+require_once 'src/Commands/GetSchemaCommand.php';
+
+// Environment variables
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/');
+$dotenv->load();
+
+// Redis
+Predis\Autoloader::register();
+
+// Commands
+$commandMap = [
+    'sync' => new Commands\RatingsSyncCommand(),
+    'sync-back' => new Commands\RatingsSyncBackCommand(),
+    'get-schema' => new Commands\GetSchemaCommand(),
+];
+
+$commandName = $argv[1] ?? null;
+
+if (!$commandName) {
+    Libraries\Color::print("Lista poleceń:\n", 'lightgreen');
+
+    foreach ($commandMap as $commandName => $command) {
+        Libraries\Color::print("$commandName - ", 'lightorange');
+        Libraries\Color::print($command->getDescription() . "\n", 'white');
+    }
+
+    exit(0);
+}
+
+$command = $commandMap[$commandName] ?? null;
+
+if ($command) {
+    $command->handle(array_slice($argv, 1));
+} else {
+    Libraries\Color::print("Wystąpił błąd:\n", 'lightred');
+    Libraries\Color::print("Nieznane polecenie: ", 'white');
+    Libraries\Color::print("$commandName\n", 'lightorange');
+}

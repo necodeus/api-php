@@ -18,6 +18,9 @@ class Database
         );
     }
 
+    /**
+     * Executes a query and returns the statement
+     */
     protected function query($query, $params = []): \PDOStatement
     {
         $statement = $this->db->prepare($query);
@@ -31,12 +34,17 @@ class Database
         return $statement;
     }
 
-    public function fetchAll($query, $params = []): array
+    public function fetchColumn(string $query, array $params = []): array
+    {
+        return $this->query($query, $params)->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    public function fetchAll(string $query, array $params = []): array
     {
         return $this->query($query, $params)->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function fetch($query, $params = []): array
+    public function fetch(string $query, array $params = []): array
     {
         return $this->query($query, $params)->fetch(\PDO::FETCH_ASSOC) ?: [];
     }

@@ -7,7 +7,7 @@ use Repositories\BaseRepository;
 
 use loophp\collection\Collection;
 
-class BlogPostRatingsRepo extends BaseRepository implements BaseRepositoryInterface
+class BlogPostRatingsSummaryRepo extends BaseRepository implements BaseRepositoryInterface
 {
     #[Override]
     public function getAll(int $page = 1, int $limit = 10): Collection
@@ -15,7 +15,7 @@ class BlogPostRatingsRepo extends BaseRepository implements BaseRepositoryInterf
         $offset = ($page - 1) * $limit;
 
         $query = "SELECT *
-            FROM b_post_ratings
+            FROM b_post_ratings_summary
             LIMIT $limit OFFSET $offset
         ";
 
@@ -24,28 +24,11 @@ class BlogPostRatingsRepo extends BaseRepository implements BaseRepositoryInterf
         return Collection::fromIterable($result);
     }
 
-    public function findRating(string $userHash, int $postId): ?int
-    {
-        $query = "SELECT rating
-            FROM b_post_ratings
-            WHERE
-                user_hash = :user_hash
-                AND post_id = :post_id
-        ";
-
-        $result = $this->db->fetch($query, [
-            'user_hash' => $userHash,
-            'post_id' => $postId,
-        ]);
-
-        return $result ? $result['rating'] : null;
-    }
-
     #[Override]
     public function count(): int
     {
         $query = "SELECT COUNT(*) AS count
-            FROM b_post_ratings
+            FROM b_post_ratings_summary
         ";
 
         $result = $this->db->fetch($query);
@@ -55,6 +38,6 @@ class BlogPostRatingsRepo extends BaseRepository implements BaseRepositoryInterf
 
     public function upsert(array $data): int
     {
-        return $this->db->upsert('b_post_ratings', $data);
+        return $this->db->upsert('b_post_ratings_summary', $data);
     }
 }

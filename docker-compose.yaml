@@ -14,6 +14,7 @@ services:
       - "80:80"
     networks:
       - necodeo
+
   php.83:
     container_name: application
     build:
@@ -26,6 +27,17 @@ services:
       - "9000:9000"
     networks:
       - necodeo
+
+  redis:
+    container_name: redis
+    build:
+      context: .
+      dockerfile: Dockerfile.redis
+    ports:
+      - "6379:6379"
+    networks:
+      - necodeo
+
   minio.latest:
     container_name: s3-server
     build:
@@ -42,6 +54,7 @@ services:
       - MINIO_ROOT_PASSWORD=minioadmin
     networks:
       - necodeo
+
 networks:
   necodeo:
 
