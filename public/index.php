@@ -27,6 +27,7 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
 
     if (preg_match('/^paper-api\./', $domain)) {
         require_once __DIR__ . '/../src/Controllers/PaperApi/PostController.php';
+        require_once __DIR__ . '/../src/Controllers/PaperApi/PostRatingController.php';
         require_once __DIR__ . '/../src/Routers/PaperApiRouter.php';
     }
 

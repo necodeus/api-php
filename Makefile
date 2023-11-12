@@ -1,17 +1,17 @@
 build-php:
-	docker build -f php/Dockerfile.php -t api-application:8.2 application
+	docker build -f ./Dockerfile.php -t api-application:8.3 .
 
 build-nginx:
-	docker build -f Dockerfile.nginx -t api-nginx:latest nginx
+	docker build -f ./Dockerfile.nginx -t api-nginx:latest .
 
 build-minio:
-	docker build -f Dockerfile.minio -t api-minio:latest minio
+	docker build -f ./Dockerfile.minio -t api-minio:latest .
 
 build-all: build-php build-nginx
 
 push:
-	docker tag api-application:8.2 necodeo/api-application:8.2
-	docker push necodeo/api-application:8.2
+	docker tag api-application:8.3 necodeo/api-application:8.3
+	docker push necodeo/api-application:8.3
 
 	docker tag api-nginx:latest necodeo/api-nginx:latest
 	docker push necodeo/api-nginx:latest
@@ -20,7 +20,7 @@ push:
 	docker push necodeo/api-minio:latest
 
 run-php:
-	docker run -d --name php -p 9000:9000 -v $(PWD):/var/www/html api-application:8.2
+	docker run -d --name php -p 9000:9000 -v $(PWD):/var/www/html api-application:8.3
 
 run-nginx:
 	docker run -d --name nginx -p 80:80 -v $(PWD):/var/www/html -v $(PWD)/.docker-config/conf.d/default.conf:/etc/nginx/conf.d/default.conf api-nginx:latest

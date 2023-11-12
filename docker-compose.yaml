@@ -14,7 +14,7 @@ services:
       - "80:80"
     networks:
       - necodeo
-  php.82:
+  php.83:
     container_name: application
     build:
       context: .

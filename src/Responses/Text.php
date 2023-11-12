@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Responses;
 
@@ -27,6 +27,6 @@ class Text
 
     public function __destruct()
     {
-        print $this->data;
+        echo $this->data;
     }
 }

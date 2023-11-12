@@ -11,6 +11,7 @@
       "activityBar.inactiveForeground": "#720081",
       "activityBar.border": "#5e1570",
       "activityBar.activeBorder": "#ed62ff"
-    }
+    },
+    "php.version": "8.3"
   }
 }

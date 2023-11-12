@@ -52,4 +52,20 @@ class Database
 
         return $this->db->lastInsertId();
     }
+
+    public function upsert(string $table, array $data): int
+    {
+        $columns = array_keys($data);
+        $placeholders = array_map(function($col) { return ":$col"; }, $columns);
+
+        $updateClauses = array_map(function($col) { return "$col = VALUES($col)"; }, $columns);
+
+        $query = "INSERT INTO {$table} (" . implode(', ', $columns) . ") VALUES (" . implode(', ', $placeholders) . ") ON DUPLICATE KEY UPDATE " . implode(', ', $updateClauses);
+
+        $params = array_combine($placeholders, array_values($data));
+
+        $statement = $this->query($query, $params);
+
+        return $statement->rowCount() > 0 ? $this->db->lastInsertId() : 0;
+    }
 }

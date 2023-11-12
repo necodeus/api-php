@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Controllers\PaperApi;
 
@@ -20,7 +20,7 @@ class PostController extends BaseController
     public function index(): void
     {
         performance()::measure();
-        $posts = $this->repo->getPosts();
+        $posts = $this->repo->getAll();
         performance()::measure();
 
         header('Content-Type: application/json');

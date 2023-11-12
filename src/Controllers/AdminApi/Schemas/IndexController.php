@@ -4,6 +4,7 @@ namespace Controllers\AdminApi\Schemas;
 
 use Controllers\BaseController;
 use Libraries\Cache;
+use loophp\collection\Collection;
 use Repositories\Blog\BlogCategoriesRepo;
 use Repositories\Blog\BlogCommentsRepo;
 use Repositories\Blog\BlogPostsRepo;
@@ -135,11 +136,14 @@ class IndexController extends BaseController
         }
         performance()::measure();
 
+        $records = Collection::fromIterable($records);
+
         header('Content-Type: application/json');
         print json_encode([
             'status' => 'ok',
             'time' => performance()::result(),
-            'records' => $records,
+            'columns' => array_keys($records?->first() ?? []),
+            'records' => $records->all(),
             'records_count' => $recordsCount,
         ]);
     }
