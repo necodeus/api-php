@@ -24,6 +24,20 @@ class BlogPostRatingsSummaryRepo extends BaseRepository implements BaseRepositor
         return Collection::fromIterable($result);
     }
 
+    public function getRatingsSummaryById(string $postId): ?array
+    {
+        $query = "SELECT *
+            FROM b_post_ratings_summary
+            WHERE post_id = :post_id
+        ";
+
+        $result = $this->db->fetch($query, [
+            'post_id' => $postId,
+        ]);
+
+        return $result ?? null;
+    }
+
     #[Override]
     public function count(): int
     {

@@ -31,7 +31,7 @@ class PostRatingController extends BaseController
         return ($averageRating * $ratingsCount + $userRating) / ($ratingsCount + 1);
     }
 
-    public function rate(int $id)
+    public function rate(string $id)
     {
         // pobranie danych
         $current = $_GET['userRating'] ?? null;
@@ -50,14 +50,6 @@ class PostRatingController extends BaseController
         // pobranei poprzedniej oceny
         $previous = $this->redis_getRating($userHash, $id) ?? $this->ratings->findRating($userHash, $id);
 
-        if ($previous == $current) {
-            // jeżeli ocena się nie zmieniła, to zwracamy błąd
-            return response([
-                'status' => 'error',
-                'message' => 'You have already rated this post',
-            ])->status(400);
-        }
-
         // zapisanie nowej oceny
         $this->redis->set("rating:$userHash:$id", $current);
 
@@ -71,7 +63,7 @@ class PostRatingController extends BaseController
         ])->status(200);
     }
 
-    protected function redis_getRating(string $userHash, int $postId): ?float
+    protected function redis_getRating(string $userHash, string $postId): ?float
     {
         return $this->redis->get("rating:$userHash:$postId");
     }

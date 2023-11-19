@@ -5,16 +5,20 @@ namespace Controllers\PaperApi;
 use Controllers\BaseController;
 
 use Repositories\Blog\BlogPostsRepo;
+use Repositories\Blog\BlogPostRatingsSummaryRepo;
 
 class PostController extends BaseController
 {
     private BlogPostsRepo $repo;
+
+    private BlogPostRatingsSummaryRepo $ratingsSummary;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->repo = new BlogPostsRepo();
+        $this->ratingsSummary = new BlogPostRatingsSummaryRepo();
     }
 
     public function index(): void
@@ -35,6 +39,7 @@ class PostController extends BaseController
     {
         performance()::measure();
         $post = $this->repo->getPostById($id);
+        $ratingsSummary = $this->ratingsSummary->getRatingsSummaryById($id);
         performance()::measure();
 
         header('Content-Type: application/json');
@@ -42,6 +47,7 @@ class PostController extends BaseController
             'status' => 'ok',
             'time' => performance()::result(),
             'post' => $post,
+            'stars' => $ratingsSummary,
         ]);
     }
 }

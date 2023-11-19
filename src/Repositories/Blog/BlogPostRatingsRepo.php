@@ -24,7 +24,7 @@ class BlogPostRatingsRepo extends BaseRepository implements BaseRepositoryInterf
         return Collection::fromIterable($result);
     }
 
-    public function findRating(string $userHash, int $postId): ?int
+    public function findRating(string $userHash, string $postId): ?int
     {
         $query = "SELECT rating
             FROM b_post_ratings
