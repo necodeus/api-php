@@ -48,7 +48,11 @@ class PostRatingController extends BaseController
         }
 
         // pobranei poprzedniej oceny
-        $previous = $this->redis_getRating($userHash, $id) ?? $this->ratings->findRating($userHash, $id);
+        $previous = $this->redis_getRating($userHash, $id);
+
+        if (!$previous) {
+            $this->ratings->findRating($userHash, $id);
+        }
 
         // zapisanie nowej oceny
         $this->redis->set("rating:$userHash:$id", $current);
