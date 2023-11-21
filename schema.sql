@@ -17,13 +17,13 @@ CREATE TABLE `b_comments` (
 
 CREATE TABLE `b_post_ratings` (
   `user_hash` char(32) NOT NULL,
-  `post_id` int(11) NOT NULL,
+  `post_id` char(36) NOT NULL,
   `rating` tinyint(4) NOT NULL,
   PRIMARY KEY (`user_hash`,`post_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci
 
 CREATE TABLE `b_post_ratings_summary` (
-  `post_id` int(11) NOT NULL,
+  `post_id` char(36) NOT NULL,
   `average` float NOT NULL,
   `count` int(11) NOT NULL,
   PRIMARY KEY (`post_id`)
@@ -108,13 +108,10 @@ CREATE TABLE `c_navigations` (
 
 CREATE TABLE `c_pages` (
   `id` char(36) NOT NULL,
-  `method` varchar(36) NOT NULL,
   `slug` varchar(2048) NOT NULL,
-  `status_code` int(11) NOT NULL,
   `content_type` varchar(36) NOT NULL,
   `content_id` char(36) DEFAULT NULL,
   `created_at` datetime NOT NULL,
-  `extra_data` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci
 
@@ -122,6 +119,7 @@ CREATE TABLE `c_redirections` (
   `id` char(36) NOT NULL,
   `link` varchar(512) DEFAULT NULL,
   `code` int(11) DEFAULT NULL,
+  `is_external` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci
 
@@ -393,3 +391,4 @@ CREATE TABLE `u_verifications` (
   `verified_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci
+
