@@ -92,6 +92,7 @@ CREATE TABLE `c_images` (
   `resolution_y` int(11) DEFAULT NULL,
   `size` bigint(20) DEFAULT NULL,
   `mime_type` varchar(255) DEFAULT NULL,
+  `uploaded_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci
 
