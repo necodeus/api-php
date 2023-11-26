@@ -19,6 +19,7 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
         require_once __DIR__ . '/../src/Controllers/CommonApi/PageController.php';
         require_once __DIR__ . '/../src/Controllers/CommonApi/RedirectionController.php';
         require_once __DIR__ . '/../src/Controllers/CommonApi/TestController.php';
+        require_once __DIR__ . '/../src/Controllers/CommonApi/ImageController.php';
         require_once __DIR__ . '/../src/Routers/CommonApiRouter.php';
     }
 

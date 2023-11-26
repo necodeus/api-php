@@ -4,13 +4,17 @@ namespace Controllers\PaperApi;
 
 use Controllers\BaseController;
 
-use Predis\Client as RedisClient;
 use Repositories\Blog\BlogPostsRepo;
+use Repositories\User\UserProfilesRepo;
 use Repositories\Blog\BlogPostRatingsSummaryRepo;
+
+use Predis\Client as RedisClient;
 
 class PostController extends BaseController
 {
     private BlogPostsRepo $repo;
+
+    private UserProfilesRepo $userProfiles;
 
     private BlogPostRatingsSummaryRepo $ratingsSummary;
 
@@ -21,7 +25,9 @@ class PostController extends BaseController
         parent::__construct();
 
         $this->repo = new BlogPostsRepo();
+        $this->userProfiles = new UserProfilesRepo();
         $this->ratingsSummary = new BlogPostRatingsSummaryRepo();
+
         $this->redis = new RedisClient([
             'scheme' => 'tcp',
             'host' => 'redis',
@@ -47,13 +53,14 @@ class PostController extends BaseController
     {
         performance()::measure();
         $post = $this->repo->getPostById($id);
+        $postAuthor = $this->userProfiles->getPostAuthor($id);
 
         $ratingsSummary = $this->redis->hget('blog_post_ratings', $id);
 
         if (!$ratingsSummary) {
-            $ratingsSummary = $a = $this->ratingsSummary->getRatingsSummaryById($id);
+            $ratingsSummary = $this->ratingsSummary->getRatingsSummaryById($id);
         } else {
-            $ratingsSummary = $b = json_decode($ratingsSummary);
+            $ratingsSummary = json_decode($ratingsSummary);
         }
 
         performance()::measure();
@@ -63,6 +70,7 @@ class PostController extends BaseController
             'status' => 'ok',
             'time' => performance()::result(),
             'post' => $post,
+            'postAuthor' => $postAuthor,
             'stars' => $ratingsSummary,
         ]);
     }
