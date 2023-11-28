@@ -18,9 +18,9 @@ class PostRatingController extends BaseController
     public function __construct()
     {
         $this->redis = new RedisClient([
-            'scheme' => 'tcp',
-            'host' => 'redis',
-            'port' => 6379
+            'scheme' => $_ENV['REDIS_SCHEME'], // tcp
+            'host' =>  $_ENV['REDIS_HOST'], // redis
+            'port' => $_ENV['REDIS_PORT'] // 6379
         ]);
         $this->ratings = new BlogPostRatingsRepo();
         $this->ratingsSummary = new BlogPostRatingsSummaryRepo();
@@ -72,7 +72,7 @@ class PostRatingController extends BaseController
         return $this->redis->get("rating:$userHash:$postId");
     }
 
-    public function single(int $id)
+    public function single(string $id)
     {
         $rating = $this->redis->hget('blog_post_ratings', $id);
 

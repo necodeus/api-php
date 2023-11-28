@@ -29,9 +29,9 @@ class PostController extends BaseController
         $this->ratingsSummary = new BlogPostRatingsSummaryRepo();
 
         $this->redis = new RedisClient([
-            'scheme' => 'tcp',
-            'host' => 'redis',
-            'port' => 6379
+            'scheme' => $_ENV['REDIS_SCHEME'], // tcp
+            'host' =>  $_ENV['REDIS_HOST'], // use "redis" if developing with Docker
+            'port' => $_ENV['REDIS_PORT'] // 6379
         ]);
     }
 
@@ -39,6 +39,7 @@ class PostController extends BaseController
     {
         performance()::measure();
         $posts = $this->repo->getAllPublic();
+        // TODO: $posts = cache($this->redis)->getSetReturn('getAllPublic', 60, fn () => $this->repo->getAllPublic()});
         performance()::measure();
 
         header('Content-Type: application/json');

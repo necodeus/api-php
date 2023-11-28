@@ -21,9 +21,9 @@ class RatingsSyncBackCommand extends \BaseCommand
     public function __construct()
     {
         $this->redis = new RedisClient([
-            'scheme' => 'tcp',
-            'host' => 'redis',
-            'port' => 6379,
+            'scheme' => $_ENV['REDIS_SCHEME'], // tcp
+            'host' =>  $_ENV['REDIS_HOST'], // use "redis" if developing with Docker
+            'port' => $_ENV['REDIS_PORT'] // 6379
         ]);
         $this->ratings = new BlogPostRatingsRepo();
         $this->ratingsSummary = new BlogPostRatingsSummaryRepo();

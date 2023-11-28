@@ -18,7 +18,7 @@ class BlogPostsRepo extends BaseRepository implements BaseRepositoryInterface
         $offset = ($page - 1) * $limit;
 
         $query = "SELECT *,
-                CONCAT('http://images.localhost/', main_image_id) AS main_image_url
+                CONCAT('https://images.necodeo.com/', main_image_id) AS main_image_url
             FROM b_posts
             LIMIT $limit OFFSET $offset
         ";
@@ -40,7 +40,7 @@ class BlogPostsRepo extends BaseRepository implements BaseRepositoryInterface
         $query = "SELECT
                 bp.*,
                 p.*,
-                CONCAT('http://images.localhost/', main_image_id) AS main_image_url
+                CONCAT('https://images.necodeo.com/', main_image_id) AS main_image_url
             FROM b_posts bp
             INNER JOIN c_pages p ON p.content_id = bp.id
             LIMIT $limit OFFSET $offset
@@ -53,7 +53,7 @@ class BlogPostsRepo extends BaseRepository implements BaseRepositoryInterface
 
     public function getPostById(string $id): array
     {
-        $prefix = 'http://images.localhost/';
+        $prefix = 'https://images.necodeo.com/';
 
         $query = "SELECT
                 *,
@@ -76,7 +76,7 @@ class BlogPostsRepo extends BaseRepository implements BaseRepositoryInterface
      */
     public function getPublicPostById(string $id): array
     {
-        $prefix = 'http://images.localhost/';
+        $prefix = 'https://images.necodeo.com/';
 
         $query = "SELECT
                 bp.*,
