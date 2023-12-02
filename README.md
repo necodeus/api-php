@@ -1,16 +1,16 @@
 # API
 
-Web API for my apps.
+## Description
 
-## Development
+Web API for my apps *written in PHP*.
 
-### Set-up the environment
+## Installation and usage
 
 ```bash
 docker compose up
 ```
 
-### Composer
+List of available composer commands:
 
 ```bash
 # Rebuild the autoload file
