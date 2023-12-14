@@ -1,5 +1,4 @@
-#FROM php:8.2-fpm-alpine
-FROM php:8.3-rc-fpm-alpine3.18
+FROM php:8.3-fpm-alpine
 
 # Dependencies
 RUN apk --no-cache --update add linux-headers \
@@ -11,9 +10,8 @@ RUN apk --no-cache --update add linux-headers \
     libzip-dev \
     icu-dev
 
-# PHP Extensions (intl, pdo_mysql, zip, xdebug)
-RUN docker-php-ext-configure intl \
-    && docker-php-ext-install intl pdo_mysql zip
+RUN docker-php-ext-configure intl && docker-php-ext-install intl pdo_mysql zip
+
 #RUN git clone -b xdebug_3_2 https://github.com/xdebug/xdebug.git /root/xdebug \
 #    && cd /root/xdebug \
 #    && sh ./rebuild.sh

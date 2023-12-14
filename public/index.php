@@ -35,6 +35,11 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
         require_once __DIR__ . '/../src/Routers/PaperApiRouter.php';
     }
 
+    if (preg_match('/^shop-api\./', $domain)) {
+        require_once __DIR__ . '/../src/Controllers/ShopApi/IndexController.php';
+        require_once __DIR__ . '/../src/Routers/ShopApiRouter.php';
+    }
+
     if (preg_match('/^admin-api\./', $domain)) {
         require_once __DIR__ . '/../src/Controllers/AdminApi/Schemas/IndexController.php';
         require_once __DIR__ . '/../src/Routers/AdminApiRouter.php';
