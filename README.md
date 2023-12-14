@@ -10,7 +10,7 @@ Web API for my apps *written in PHP*.
 docker compose up
 ```
 
-_List of available composer commands:_
+List of available composer commands:
 
 ```bash
 # Rebuild the autoload file
