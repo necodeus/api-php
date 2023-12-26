@@ -15,6 +15,7 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
 
     require_once __DIR__ . '/../src/Controllers/BaseController.php';
 
+    // TODO: autoload controllers per domain
     if (preg_match('/^common-api\./', $domain)) {
         require_once __DIR__ . '/../src/Controllers/CommonApi/PageController.php';
         require_once __DIR__ . '/../src/Controllers/CommonApi/RedirectionController.php';
@@ -31,6 +32,7 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     if (preg_match('/^paper-api\./', $domain)) {
         require_once __DIR__ . '/../src/Controllers/PaperApi/TestController.php';
         require_once __DIR__ . '/../src/Controllers/PaperApi/PostController.php';
+        require_once __DIR__ . '/../src/Controllers/PaperApi/CommentController.php';
         require_once __DIR__ . '/../src/Controllers/PaperApi/PostRatingController.php';
         require_once __DIR__ . '/../src/Routers/PaperApiRouter.php';
     }

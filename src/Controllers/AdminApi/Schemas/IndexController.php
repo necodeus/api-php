@@ -2,6 +2,9 @@
 
 namespace Controllers\AdminApi\Schemas;
 
+// TODO: Zakopać :D
+// Ten plik jest poryty, tak samo jak pomysł zwracania wszystkich kolumn z tabeli
+
 use Controllers\BaseController;
 use Libraries\Cache;
 use loophp\collection\Collection;

@@ -4,14 +4,20 @@
       "path": "."
     }
   ],
+  "extensions": {
+    "recommendations": [
+      // "felixfbecker.php-intellisense",
+    ]
+  },
   "settings": {
+    "php.version": "8.3",
     "workbench.colorCustomizations": {
-      "activityBar.background": "#27123b",
-      "activityBar.foreground": "#ed62ff",
-      "activityBar.inactiveForeground": "#720081",
-      "activityBar.border": "#5e1570",
-      "activityBar.activeBorder": "#ed62ff"
+			"titleBar.activeBackground": "#0e0e0e",
+      "activityBar.background": "#0e0e0e",
+      "activityBar.foreground": "#ff0055",
+      "activityBar.inactiveForeground": "#920031",
+      "activityBar.border": "#ff0055",
+      "activityBar.activeBorder": "#ff0055"
     },
-    "php.version": "8.3"
-  }
+  },
 }
