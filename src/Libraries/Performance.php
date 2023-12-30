@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-namespace Debuggers;
+namespace Libraries;
 
 class Performance
 {

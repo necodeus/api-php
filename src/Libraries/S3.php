@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-namespace Services;
+namespace Libraries;
 
 use Aws\S3\S3Client;
 use Aws\Result;
@@ -25,7 +25,7 @@ class S3
 
   /**
    * Download a file from S3
-   * 
+   *
    * @return Result
    */
   public function download(string $bucket, string $key, string $file): Result
@@ -39,7 +39,7 @@ class S3
 
   /**
    * Upload a file to S3
-   * 
+   *
    * @return Result
    */
   public function upload(string $bucket, string $key, string $body): Result

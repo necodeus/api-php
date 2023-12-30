@@ -6,14 +6,14 @@ namespace Tests;
 
 use PHPUnit\Framework\TestCase;
 
-use Services\File;
-
 final class ExampleTest extends TestCase
 {
     public function testFileExists(): void
     {
-        $f = new File('tests', 'ExampleTest.php');
+        $file = new \Services\File('tests', 'ExampleTest.php');
 
-        $this->assertEquals(true, $f->exists());
+        $result = $file->exists();
+
+        $this->assertTrue($result);
     }
 }

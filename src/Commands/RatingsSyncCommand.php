@@ -2,10 +2,9 @@
 
 namespace Commands;
 
-use Libraries\Color;
 use Predis\Client as RedisClient;
-use Repositories\Blog\BlogPostRatingsRepo;
-use Repositories\Blog\BlogPostRatingsSummaryRepo;
+use Libraries\Color;
+use Repositories\BlogRepository;
 
 class RatingsSyncCommand extends \BaseCommand
 {
@@ -14,19 +13,17 @@ class RatingsSyncCommand extends \BaseCommand
 
     protected RedisClient $redis;
 
-    protected BlogPostRatingsRepo $ratings;
-
-    protected BlogPostRatingsSummaryRepo $ratingsSummary;
+    protected BlogRepository $blog;
 
     public function __construct()
     {
+        $this->blog = new BlogRepository();
+
         $this->redis = new RedisClient([
             'scheme' => $_ENV['REDIS_SCHEME'], // tcp
             'host' =>  $_ENV['REDIS_HOST'], // use "redis" if developing with Docker
             'port' => $_ENV['REDIS_PORT'] // 6379
         ]);
-        $this->ratings = new BlogPostRatingsRepo();
-        $this->ratingsSummary = new BlogPostRatingsSummaryRepo();
     }
 
     public function handle($arguments)
@@ -41,7 +38,7 @@ class RatingsSyncCommand extends \BaseCommand
 
             Color::print("Syncing rating for post $postId by user $userHash...\n", 'lightgreen');
 
-            $this->ratings->upsert([
+            $this->blog->upsertPostRating([
                 'user_hash' => $userHash,
                 'post_id' => $postId,
                 'rating' => $userRating,
@@ -57,7 +54,7 @@ class RatingsSyncCommand extends \BaseCommand
 
             Color::print("Syncing rating summary for post $postId...\n", 'lightgreen');
 
-            $this->ratingsSummary->upsert([
+            $this->blog->upsertPostRatingsSummary([
                 'post_id' => $postId,
                 'average' => $rating['average'],
                 'count' => $rating['count'],

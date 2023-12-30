@@ -1,7 +1,18 @@
 <?php
 
-use Debuggers\Performance;
-use Responses\Text;
+use Libraries\Performance;
+use Libraries\Text;
+use Libraries\FileLogger;
+
+function uuidv4() {
+    return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0x0fff) | 0x4000,
+        mt_rand(0, 0x3fff) | 0x8000,
+        mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+    );
+}
 
 function performance(): Performance
 {
@@ -11,30 +22,6 @@ function performance(): Performance
 function logger(): FileLogger
 {
     return new FileLogger();
-}
-
-class FileLogger
-{
-    public function info(string $message): void
-    {
-        $this->log('INFO', $message);
-    }
-
-    public function error(string $message): void
-    {
-        $this->log('ERROR', $message);
-    }
-
-    public function log(string $level, string $message): void
-    {
-        $log = sprintf("[%s] %s\n", $level, $message);
-
-        file_put_contents(
-            $_ENV['LOG_FILE'],
-            $log,
-            FILE_APPEND
-        );
-    }
 }
 
 function response($data = ""): Text

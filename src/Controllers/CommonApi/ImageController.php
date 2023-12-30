@@ -4,48 +4,55 @@ namespace Controllers\CommonApi;
 
 use Controllers\BaseController;
 
-use Repositories\Common\CommonImagesRepo;
 use Enums\ImageTypeEnum;
+use Repositories\CommonRepository;
 
 class ImageController extends BaseController
 {
-    private CommonImagesRepo $images;
+    private CommonRepository $common;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->images = new CommonImagesRepo();
+        $this->common = new CommonRepository();
     }
 
-    public function upload(): void
+    public function upload(): bool
     {
         $filePath = $_FILES['post_profile_image'] ?? null;
 
         if (!$filePath) {
-            header('Content-Type: application/json');
+            @header('Content-Type: application/json');
+
             print json_encode([
                 'status' => 'error',
                 'message' => 'No file provided',
             ]);
-            return;
+
+            return false;
         }
 
         try {
-            $image = $this->images->upload($filePath['tmp_name'], ImageTypeEnum::PostMainImage);
+            $image = $this->common->uploadImage($filePath['tmp_name'], ImageTypeEnum::PostMainImage);
         } catch (\Exception $e) {
-            header('Content-Type: application/json');
+            @header('Content-Type: application/json');
+
             print json_encode([
                 'status' => 'error',
                 'message' => $e->getMessage(),
             ]);
-            return;
+
+            return false;
         }
 
-        header('Content-Type: application/json');
+        @header('Content-Type: application/json');
+
         print json_encode([
             'status' => 'ok',
             'image' => $image,
         ]);
+
+        return true;
     }
 }

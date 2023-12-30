@@ -2,15 +2,15 @@
 
 namespace Controllers\CommonApi;
 
-use Repositories\Common\CommonPagesRepo;
+use Repositories\CommonRepository;
 
 class PageController
 {
-    private CommonPagesRepo $repo;
+    private CommonRepository $common;
 
     public function __construct()
     {
-        $this->repo = new CommonPagesRepo();
+        $this->common = new CommonRepository();
     }
 
     public function single(): void
@@ -18,7 +18,7 @@ class PageController
         $slug = $_GET['slug'] ?? '';
 
         performance()::measure();
-        $pages = $this->repo->getPageBySlug($slug);
+        $pages = $this->common->getPageBySlug($slug);
         performance()::measure();
 
         header('Content-Type: application/json');

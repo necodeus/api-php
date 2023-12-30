@@ -11,8 +11,6 @@
         "psr-4": {
             "Services\\": "src/Services/",
             "Repositories\\": "src/Repositories/",
-            "Debuggers\\": "src/Debuggers/",
-            "Responses\\": "src/Responses/",
             "Libraries\\": "src/Libraries/",
             "Enums\\": "src/Enums/",
             "Tests\\": "tests/"

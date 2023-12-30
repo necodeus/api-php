@@ -2,21 +2,21 @@
 
 namespace Controllers\CommonApi;
 
-use Repositories\Common\CommonRedirectionsRepo;
+use Repositories\CommonRepository;
 
 class RedirectionController
 {
-    private CommonRedirectionsRepo $repo;
+    private CommonRepository $common;
 
     public function __construct()
     {
-        $this->repo = new CommonRedirectionsRepo();
+        $this->common = new CommonRepository();
     }
 
     public function single(string $id): void
     {
         performance()::measure();
-        $redirection = $this->repo->getRedirectionById($id);
+        $redirection = $this->common->getRedirectionById($id);
         performance()::measure();
 
         header('Content-Type: application/json');

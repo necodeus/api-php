@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 namespace Repositories;
 
-use Services\Database;
+use Libraries\Database;
 
 class BaseRepository
 {

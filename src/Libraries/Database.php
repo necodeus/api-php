@@ -1,6 +1,6 @@
 <?php
 
-namespace Services;
+namespace Libraries;
 
 class Database
 {
@@ -75,5 +75,19 @@ class Database
         $statement = $this->query($query, $params);
 
         return $statement->rowCount() > 0 ? $this->db->lastInsertId() : 0;
+    }
+
+    public function update(string $table, array $data, array $where): int
+    {
+        $columns = array_keys($data);
+        $whereColumns = array_keys($where);
+
+        $query = "UPDATE {$table} SET " . implode(', ', array_map(function($col) { return "$col = :$col"; }, $columns)) . " WHERE " . implode(' AND ', array_map(function($col) { return "$col = :$col"; }, $whereColumns));
+
+        $params = array_merge(array_combine($columns, array_values($data)), array_combine($whereColumns, array_values($where)));
+
+        $statement = $this->query($query, $params);
+
+        return $statement->rowCount();
     }
 }

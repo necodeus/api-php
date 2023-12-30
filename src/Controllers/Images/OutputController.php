@@ -1,14 +1,15 @@
-<?php 
+<?php
 
 namespace Controllers\Images;
 
 use Services\Filesystem;
+use Libraries\File;
 
 class OutputController
 {
     public function load(string $id)
     {
-        $file = Filesystem::load('../uploads', $id);
+        $file = new File('../uploads', $id);
 
         if ($file->exists() === false) {
             return response()->status(404);

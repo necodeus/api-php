@@ -2,7 +2,7 @@
 
 namespace Commands;
 
-use Services\Database;
+use Libraries\Database;
 use Services\File;
 
 class GetSchemaCommand extends \BaseCommand

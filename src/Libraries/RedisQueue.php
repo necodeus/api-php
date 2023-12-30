@@ -3,7 +3,7 @@
 namespace Libraries;
 
 use Predis\Client as RedisClient;
-use Services\Database;
+use Libraries\Database;
 
 class RedisQueue
 {

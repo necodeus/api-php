@@ -4,8 +4,7 @@ namespace Commands;
 
 use Libraries\Color;
 use Predis\Client as RedisClient;
-use Repositories\Blog\BlogPostRatingsRepo;
-use Repositories\Blog\BlogPostRatingsSummaryRepo;
+use Repositories\BlogRepository;
 
 class RatingsSyncBackCommand extends \BaseCommand
 {
@@ -14,26 +13,24 @@ class RatingsSyncBackCommand extends \BaseCommand
 
     protected RedisClient $redis;
 
-    protected BlogPostRatingsRepo $ratings;
-
-    protected BlogPostRatingsSummaryRepo $ratingsSummary;
+    protected BlogRepository $blog;
 
     public function __construct()
     {
+        $this->blog = new BlogRepository();
+
         $this->redis = new RedisClient([
             'scheme' => $_ENV['REDIS_SCHEME'], // tcp
             'host' =>  $_ENV['REDIS_HOST'], // use "redis" if developing with Docker
             'port' => $_ENV['REDIS_PORT'] // 6379
         ]);
-        $this->ratings = new BlogPostRatingsRepo();
-        $this->ratingsSummary = new BlogPostRatingsSummaryRepo();
     }
 
     public function handle($arguments)
     {
         Color::print("Syncing ratings...\n", 'lightgreen');
 
-        $allRatings = $this->ratings->getAll(1, 999_999_999);
+        $allRatings = $this->blog->getPostRatings(1, 999_999_999);
 
         foreach ($allRatings as $rating) {
             $userHash = $rating['user_hash'];
@@ -44,7 +41,7 @@ class RatingsSyncBackCommand extends \BaseCommand
             $this->redis->set("rating:$userHash:$postId", $rating['rating']);
         }
 
-        $allRatingsSummary = $this->ratingsSummary->getAll(1, 999_999_999);
+        $allRatingsSummary = $this->blog->getPostRatingsSummary(1, 999_999_999);
 
         foreach ($allRatingsSummary as $ratingSummary) {
             $postId = $ratingSummary['post_id'];

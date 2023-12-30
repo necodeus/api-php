@@ -22,13 +22,6 @@ CREATE TABLE `b_post_ratings` (
   PRIMARY KEY (`user_hash`,`post_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci
 
-CREATE TABLE `b_post_ratings_summary` (
-  `post_id` char(36) NOT NULL,
-  `average` float NOT NULL,
-  `count` int(11) NOT NULL,
-  PRIMARY KEY (`post_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci
-
 CREATE TABLE `b_posts` (
   `id` char(36) NOT NULL,
   `title` varchar(512) DEFAULT NULL,
@@ -392,4 +385,3 @@ CREATE TABLE `u_verifications` (
   `verified_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci
-
