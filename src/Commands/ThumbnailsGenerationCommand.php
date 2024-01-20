@@ -63,7 +63,13 @@ class ThumbnailsGenerationCommand extends \BaseCommand
                 $remotePath = "https://images.necodeo.com/{$image['id']}";
                 $localPath = "." . $image['local_path'];
 
-                $this->downloadImage($remotePath, $localPath);
+                if (!\file_exists($localPath)) {
+                    $this->downloadImage($remotePath, $localPath);
+                }
+
+                if (!\imagecreatefromjpeg($localPath)) {
+                    continue;
+                }
 
                 $this->generateThumbnail($localPath, $dimension);
             }
@@ -73,8 +79,6 @@ class ThumbnailsGenerationCommand extends \BaseCommand
     protected function downloadImage(string $remotePath, string $localPath): bool
     {
         $ch = \curl_init($remotePath);
-
-        print $localPath. "\n";
 
         $fp = \fopen($localPath, 'wb');
 
