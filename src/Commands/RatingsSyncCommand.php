@@ -9,6 +9,7 @@ use Repositories\BlogRepository;
 class RatingsSyncCommand extends \BaseCommand
 {
     protected $name = 'sync';
+
     protected $description = 'Synchronizes ratings from Redis to MySQL';
 
     protected RedisClient $redis;

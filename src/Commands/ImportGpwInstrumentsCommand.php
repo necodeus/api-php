@@ -7,7 +7,7 @@ use Services\GiepewuApi;
 
 set_time_limit(10000);
 
-class UpdateGpwInstrumentsCommand extends \BaseCommand
+class ImportGpwInstrumentsCommand extends \BaseCommand
 {
     protected $name = 'update:gpw-instruments';
 
@@ -89,10 +89,5 @@ class UpdateGpwInstrumentsCommand extends \BaseCommand
                 'name' => $instrument['name'],
             ]);
         }
-
-        return response([
-            'status' => 'ok',
-            'instruments' => count($instruments),
-        ])->status(200);
     }
 }

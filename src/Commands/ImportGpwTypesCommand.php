@@ -7,7 +7,7 @@ use Services\GiepewuApi;
 
 set_time_limit(10000);
 
-class ImportGpwTypesCommand extends \Controllers\BaseController
+class ImportGpwTypesCommand extends \BaseCommand
 {
     protected $name = 'import:gpw-types';
 

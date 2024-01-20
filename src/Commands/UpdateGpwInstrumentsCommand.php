@@ -2,6 +2,7 @@
 
 namespace Commands;
 
+use Libraries\Color;
 use Libraries\Database;
 use Services\GiepewuApi;
 
@@ -29,6 +30,8 @@ class UpdateGpwInstrumentsCommand extends \BaseCommand
             $response = GiepewuApi::data($instrument['type_id'], $instrument['name']);
 
             $isin = $response[0]['isin'] ?? null;
+
+            Color::print("Updating instrument {$instrument['name']} with ISIN $isin...\n", 'lightgreen');
 
             $db->update('gpw_instruments', [
                 'isin' => $isin,
