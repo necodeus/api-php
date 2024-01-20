@@ -72,19 +72,19 @@ class ThumbnailsGenerationCommand extends \BaseCommand
 
     protected function downloadImage(string $remotePath, string $localPath): bool
     {
-        $ch = curl_init($remotePath);
+        $ch = \curl_init($remotePath);
 
         print $localPath. "\n";
 
-        $fp = fopen($localPath, 'wb');
+        $fp = \fopen($localPath, 'wb');
 
-        curl_setopt($ch, CURLOPT_FILE, $fp);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
+        \curl_setopt($ch, CURLOPT_FILE, $fp);
+        \curl_setopt($ch, CURLOPT_HEADER, 0);
 
-        curl_exec($ch);
+        \curl_exec($ch);
 
-        curl_close($ch);
-        fclose($fp);
+        \curl_close($ch);
+        \fclose($fp);
 
         return true;
     }
@@ -111,10 +111,10 @@ class ThumbnailsGenerationCommand extends \BaseCommand
 
         if ($originalAspect >= $thumbAspect) {
             $newHeight = $thumbHeight;
-            $newWidth = floor($width / ($height / $thumbHeight));
+            $newWidth = \floor($width / ($height / $thumbHeight));
         } else {
             $newWidth = $thumbWidth;
-            $newHeight = floor($height / ($width / $thumbWidth));
+            $newHeight = \floor($height / ($width / $thumbWidth));
         }
 
         $thumb = \imagecreatetruecolor($thumbWidth, $thumbHeight);
@@ -122,8 +122,8 @@ class ThumbnailsGenerationCommand extends \BaseCommand
         \imagecopyresampled(
             $thumb,
             $image,
-            floor(0 - ($newWidth - $thumbWidth) / 2),
-            floor(0 - ($newHeight - $thumbHeight) / 2),
+            \floor(0 - ($newWidth - $thumbWidth) / 2),
+            \floor(0 - ($newHeight - $thumbHeight) / 2),
             0,
             0,
             $newWidth,
