@@ -5,7 +5,7 @@ namespace Controllers\PaperApi;
 use Repositories\BlogRepository;
 use Repositories\UserRepository;
 
-use Predis\Client as RedisClient;
+// use Predis\Client as RedisClient;
 
 class PostController extends \Controllers\BaseController
 {
@@ -13,20 +13,18 @@ class PostController extends \Controllers\BaseController
 
     private UserRepository $user;
 
-    private RedisClient $redis;
+    // private RedisClient $redis;
 
     public function __construct()
     {
-        parent::__construct();
-
         $this->blog = new BlogRepository();
         $this->user = new UserRepository();
 
-        $this->redis = new RedisClient([ // TODO: trait instead of putting in every controller
-            'scheme' => $_ENV['REDIS_SCHEME'], // tcp
-            'host' =>  $_ENV['REDIS_HOST'], // use "redis" if developing with Docker
-            'port' => $_ENV['REDIS_PORT'] // 6379
-        ]);
+        // $this->redis = new RedisClient([
+        //     'scheme' => $_ENV['REDIS_SCHEME'],
+        //     'host' =>  $_ENV['REDIS_HOST'],
+        //     'port' => $_ENV['REDIS_PORT'],
+        // ]);
     }
 
     public function getPosts(): void
@@ -57,7 +55,6 @@ class PostController extends \Controllers\BaseController
             'time' => performance()::result(),
             'post' => $post,
             'postAuthor' => $postAuthor,
-            'stars' => 0, // TODO: remove
         ]);
     }
 

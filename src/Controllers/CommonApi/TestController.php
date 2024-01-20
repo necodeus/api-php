@@ -2,7 +2,7 @@
 
 namespace Controllers\CommonApi;
 
-use Services\ElevenLabsApi;
+// use Services\ElevenLabsApi;
 // use Services\S3;
 
 class TestController
@@ -13,6 +13,6 @@ class TestController
         // $result = $s3->upload('hello', 'key', 'body');
         // print json_encode($result);
 
-        print ElevenLabsApi::getHistory();
+        // print ElevenLabsApi::getHistory();
     }
 }

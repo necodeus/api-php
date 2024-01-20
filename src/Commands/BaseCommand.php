@@ -3,6 +3,7 @@
 abstract class BaseCommand
 {
     protected $name;
+
     protected $description;
 
     abstract public function handle($arguments);
