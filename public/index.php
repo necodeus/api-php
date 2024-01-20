@@ -44,6 +44,12 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
         require_once __DIR__ . '/../src/Controllers/AdminApi/Schemas/IndexController.php';
         require_once __DIR__ . '/../src/Routers/AdminApiRouter.php';
     }
+
+    if (preg_match('/^giepewu-api\./', $domain)) {
+        require_once __DIR__ . '/../src/Libraries/simple_html_dom.php';
+        require_once __DIR__ . '/../src/Controllers/GiepewuApi/InstrumentsController.php';
+        require_once __DIR__ . '/../src/Routers/GiepewuApiRouter.php';
+    }
 }, [
     'cacheFile' => __DIR__ . '/../cache/route.cache',
     'cacheDisabled' => true,

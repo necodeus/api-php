@@ -66,15 +66,46 @@ class Database
         $columns = array_keys($data);
         $placeholders = array_map(function($col) { return ":$col"; }, $columns);
 
-        $updateClauses = array_map(function($col) { return "$col = VALUES($col)"; }, $columns);
+        $updateClauses = array_map(function($col) { return "`$col` = VALUES(`$col`)"; }, $columns);
 
-        $query = "INSERT INTO {$table} (" . implode(', ', $columns) . ") VALUES (" . implode(', ', $placeholders) . ") ON DUPLICATE KEY UPDATE " . implode(', ', $updateClauses);
+        $query = "INSERT INTO {$table} (`" . implode('`, `', $columns) . "`) VALUES (" . implode(', ', $placeholders) . ") ON DUPLICATE KEY UPDATE " . implode(', ', $updateClauses);
 
         $params = array_combine($placeholders, array_values($data));
 
         $statement = $this->query($query, $params);
 
         return $statement->rowCount() > 0 ? $this->db->lastInsertId() : 0;
+    }
+
+    public function bulkUpsert(string $table, array $bulkData): int
+    {
+        if(empty($bulkData)) {
+            return 0;
+        }
+
+        $columns = array_keys(reset($bulkData));
+        $placeholders = array_map(function($col) { return ":$col"; }, $columns);
+
+        $updateClauses = array_map(function($col) { return "`$col` = VALUES(`$col`)"; }, $columns);
+
+        $valuesClauses = [];
+        $params = [];
+        foreach ($bulkData as $index => $data) {
+            $valueClause = [];
+            foreach ($columns as $col) {
+                $param = ":" . $col . $index;
+                $valueClause[] = $param;
+                $params[$param] = $data[$col];
+            }
+            $valuesClauses[] = '(' . implode(', ', $valueClause) . ')';
+        }
+
+        $query = "INSERT INTO {$table} (`" . implode('`, `', $columns) . "`) VALUES " . implode(', ', $valuesClauses) . " ON DUPLICATE KEY UPDATE " . implode(', ', $updateClauses);
+
+        $statement = $this->db->prepare($query);
+        $statement->execute($params);
+
+        return $statement->rowCount();
     }
 
     public function update(string $table, array $data, array $where): int
