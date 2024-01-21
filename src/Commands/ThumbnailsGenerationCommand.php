@@ -17,14 +17,14 @@ class ThumbnailsGenerationCommand extends \BaseCommand
 
     protected $dimensions = [
         'POST_MAIN_IMAGE' => [
-            [300, 300],
-            [600, 600],
-            [1200, 1200],
+            [1200, 430],
+            [900, 430],
+            [800, 430],
         ],
         'PROFILE_PICTURE' => [
-            [300, 300],
-            [600, 600],
-            [1200, 1200],
+            [25, 25],
+            [35, 35],
+            [50, 50],
         ],
     ];
 
