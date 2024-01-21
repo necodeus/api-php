@@ -19,7 +19,6 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     if (preg_match('/^common-api\./', $domain)) {
         require_once __DIR__ . '/../src/Controllers/CommonApi/PageController.php';
         require_once __DIR__ . '/../src/Controllers/CommonApi/RedirectionController.php';
-        require_once __DIR__ . '/../src/Controllers/CommonApi/TestController.php';
         require_once __DIR__ . '/../src/Controllers/CommonApi/ImageController.php';
         require_once __DIR__ . '/../src/Routers/CommonApiRouter.php';
     }
@@ -30,7 +29,6 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     }
 
     if (preg_match('/^paper-api\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/PaperApi/TestController.php';
         require_once __DIR__ . '/../src/Controllers/PaperApi/PostController.php';
         require_once __DIR__ . '/../src/Routers/PaperApiRouter.php';
     }
