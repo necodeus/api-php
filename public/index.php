@@ -18,7 +18,6 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     // TODO: autoload controllers per domain
     if (preg_match('/^common-api\./', $domain)) {
         require_once __DIR__ . '/../src/Controllers/CommonApi/PageController.php';
-        require_once __DIR__ . '/../src/Controllers/CommonApi/RedirectionController.php';
         require_once __DIR__ . '/../src/Controllers/CommonApi/ImageController.php';
         require_once __DIR__ . '/../src/Routers/CommonApiRouter.php';
     }
@@ -41,6 +40,11 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     if (preg_match('/^admin-api\./', $domain)) {
         require_once __DIR__ . '/../src/Controllers/AdminApi/Schemas/IndexController.php';
         require_once __DIR__ . '/../src/Routers/AdminApiRouter.php';
+    }
+
+    if (preg_match('/^weather-api\./', $domain)) {
+        require_once __DIR__ . '/../src/Controllers/WeatherApi/WeatherController.php';
+        require_once __DIR__ . '/../src/Routers/WeatherApiRouter.php';
     }
 }, [
     'cacheFile' => __DIR__ . '/../cache/route.cache',
