@@ -1,6 +1,6 @@
 <?php
 
-namespace Controllers\PaperApi;
+namespace Controllers\Blog;
 
 use Repositories\BlogRepository;
 use Repositories\UserRepository;

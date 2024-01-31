@@ -9,10 +9,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Services\\": "src/Services/",
-            "Repositories\\": "src/Repositories/",
-            "Libraries\\": "src/Libraries/",
-            "Enums\\": "src/Enums/",
+            "Services\\": "src/services/",
+            "Repositories\\": "src/repositories/",
+            "Libraries\\": "src/libraries/",
+            "Enums\\": "src/enums/",
             "Tests\\": "tests/"
         }
     },

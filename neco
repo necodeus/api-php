@@ -4,19 +4,16 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 require_once 'src/helpers.php';
-require_once 'src/Libraries/Color.php';
-
-require_once 'src/Commands/BaseCommand.php';
-
-require_once 'src/Libraries/simple_html_dom.php';
-
-require_once 'src/Commands/GetSchemaCommand.php';
-require_once 'src/Commands/ImportGpwInstrumentsCommand.php';
-require_once 'src/Commands/ImportGpwTypesCommand.php';
-require_once 'src/Commands/RatingsSyncBackCommand.php';
-require_once 'src/Commands/RatingsSyncCommand.php';
-require_once 'src/Commands/ThumbnailsGenerationCommand.php';
-require_once 'src/Commands/UpdateGpwInstrumentsCommand.php';
+require_once 'src/libraries/Color.php';
+require_once 'src/libraries/simple_html_dom.php';
+require_once 'src/commands/BaseCommand.php';
+require_once 'src/commands/GetSchemaCommand.php';
+require_once 'src/commands/ImportGpwInstrumentsCommand.php';
+require_once 'src/commands/ImportGpwTypesCommand.php';
+require_once 'src/commands/RatingsSyncBackCommand.php';
+require_once 'src/commands/RatingsSyncCommand.php';
+require_once 'src/commands/ThumbnailsGenerationCommand.php';
+require_once 'src/commands/UpdateGpwInstrumentsCommand.php';
 
 // Environment variables
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/');

@@ -13,38 +13,45 @@ header("Access-Control-Allow-Origin: *");
 $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     $domain = $_SERVER['HTTP_HOST'];
 
-    require_once __DIR__ . '/../src/Controllers/BaseController.php';
+    require_once __DIR__ . '/../src/rest/controllers/BaseController.php';
 
     // TODO: autoload controllers per domain
     if (preg_match('/^common-api\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/CommonApi/PageController.php';
-        require_once __DIR__ . '/../src/Controllers/CommonApi/ImageController.php';
-        require_once __DIR__ . '/../src/Routers/CommonApiRouter.php';
+        require_once __DIR__ . '/../src/rest/controllers/common/PageController.php';
+        require_once __DIR__ . '/../src/rest/controllers/common/ImageController.php';
+        require_once __DIR__ . '/../src/routers/common-api.php';
     }
 
     if (preg_match('/^images\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/Images/OutputController.php';
-        require_once __DIR__ . '/../src/Routers/ImageRouter.php';
+        require_once __DIR__ . '/../src/rest/controllers/image/OutputController.php';
+        require_once __DIR__ . '/../src/routers/image.php';
     }
 
-    if (preg_match('/^paper-api\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/PaperApi/PostController.php';
-        require_once __DIR__ . '/../src/Routers/PaperApiRouter.php';
+    if (
+        preg_match('/^paper-api\./', $domain)
+        || preg_match('/^blog-api\./', $domain)
+    ) {
+        require_once __DIR__ . '/../src/rest/controllers/blog/PostController.php';
+        require_once __DIR__ . '/../src/routers/blog-api.php';
     }
 
     if (preg_match('/^shop-api\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/ShopApi/IndexController.php';
-        require_once __DIR__ . '/../src/Routers/ShopApiRouter.php';
+        require_once __DIR__ . '/../src/rest/controllers/shop/IndexController.php';
+        require_once __DIR__ . '/../src/routers/shop-api.php';
     }
 
     if (preg_match('/^admin-api\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/AdminApi/Schemas/IndexController.php';
-        require_once __DIR__ . '/../src/Routers/AdminApiRouter.php';
+        require_once __DIR__ . '/../src/rest/controllers/admin/Schemas/IndexController.php';
+        require_once __DIR__ . '/../src/routers/admin-api.php';
+    }
+
+    if (preg_match('/^finance-api\./', $domain)) {
+        require_once __DIR__ . '/../src/routers/finance-api.php';
     }
 
     if (preg_match('/^weather-api\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/WeatherApi/WeatherController.php';
-        require_once __DIR__ . '/../src/Routers/WeatherApiRouter.php';
+        require_once __DIR__ . '/../src/rest/controllers/weather/WeatherController.php';
+        require_once __DIR__ . '/../src/routers/weather-api.php';
     }
 }, [
     'cacheFile' => __DIR__ . '/../cache/route.cache',
