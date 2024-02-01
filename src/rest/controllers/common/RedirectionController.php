@@ -19,11 +19,10 @@ class RedirectionController
         $redirection = $this->common->getRedirectionById($id);
         performance()::measure();
 
-        header('Content-Type: application/json');
-        print json_encode([
+        response([
             'status' => 'ok',
             'time' => performance()::result(),
             'redirection' => $redirection,
-        ]);
+        ])->status(200);
     }
 }

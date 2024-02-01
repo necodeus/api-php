@@ -5,9 +5,7 @@ namespace Commands;
 use Libraries\Color;
 use Libraries\Database;
 
-set_time_limit(10000);
-
-class ThumbnailsGenerationCommand extends \BaseCommand
+class ThumbnailsGenerationCommand extends BaseCommand
 {
     protected $name = 'thumbnails:generate';
 

@@ -4,11 +4,10 @@ namespace Commands;
 
 use Libraries\Color;
 use Libraries\Database;
-use Services\GiepewuApi;
 
-set_time_limit(10000);
+use Services\GpwScraperService;
 
-class UpdateGpwInstrumentsCommand extends \BaseCommand
+class UpdateGpwInstrumentsCommand extends BaseCommand
 {
     protected $name = 'update:gpw-instruments';
 
@@ -27,7 +26,7 @@ class UpdateGpwInstrumentsCommand extends \BaseCommand
         $instruments = $db->fetchAll("SELECT * FROM gpw_instruments WHERE isin IS NULL");
 
         foreach ($instruments as $instrument) {
-            $response = GiepewuApi::data($instrument['type_id'], $instrument['name']);
+            $response = GpwScraperService::data($instrument['type_id'], $instrument['name']);
 
             $isin = $response[0]['isin'] ?? null;
 

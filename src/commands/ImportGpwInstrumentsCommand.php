@@ -3,11 +3,9 @@
 namespace Commands;
 
 use Libraries\Database;
-use Services\GiepewuApi;
+use Services\GpwScraperService;
 
-set_time_limit(10000);
-
-class ImportGpwInstrumentsCommand extends \BaseCommand
+class ImportGpwInstrumentsCommand extends BaseCommand
 {
     protected $name = 'update:gpw-instruments';
 
@@ -17,8 +15,8 @@ class ImportGpwInstrumentsCommand extends \BaseCommand
     {
         $type = 1; // indeksy
 
-        $types = GiepewuApi::getTypes();
-        $instruments = GiepewuApi::getInstrumentsByType($type);
+        $types = GpwScraperService::getTypes();
+        $instruments = GpwScraperService::getInstrumentsByType($type);
 
         $db = new Database(
             $_ENV['DATABASE_HOST'],
@@ -79,7 +77,7 @@ class ImportGpwInstrumentsCommand extends \BaseCommand
         $instruments = $this->getInstruments();
 
         foreach ($instruments as $index => $instrument) {
-            $response = GiepewuApi::data($instrument['type_id'], $instrument['name']);
+            $response = GpwScraperService::data($instrument['type_id'], $instrument['name']);
 
             $isin = $response[0]['isin'] ?? null;
 

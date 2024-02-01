@@ -5,7 +5,7 @@ namespace Commands;
 use Libraries\Database;
 use Services\File;
 
-class GetSchemaCommand extends \BaseCommand
+class GetSchemaCommand extends BaseCommand
 {
     protected $name = 'get-schema';
 

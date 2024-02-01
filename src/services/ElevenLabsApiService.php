@@ -4,7 +4,7 @@ namespace Services;
 
 use GuzzleHttp\Client;
 
-class ElevenLabsApi
+class ElevenLabsApiService
 {
     /******************************
      * T E X T   T O   S P E E C H
@@ -315,7 +315,7 @@ class ElevenLabsApi
      *
      * GET https://api.elevenlabs.io/v1/history
      */
-    public static function getHistory(string $startAfterHistoryItemId = null, int $pageSize = 100): void
+    public static function getHistory(string $startAfterHistoryItemId = null, int $pageSize = 100): array
     {
         $client = new Client();
 
@@ -329,8 +329,9 @@ class ElevenLabsApi
             ],
         ]);
 
-        header('Content-Type: application/json');
-        print $response->getBody()->getContents();
+        $contents = $response->getBody()->getContents();
+        
+        return json_decode($contents, true);
     }
 
     /**

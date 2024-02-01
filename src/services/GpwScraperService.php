@@ -2,11 +2,9 @@
 
 namespace Services;
 
-ini_set('memory_limit', '4096M');
-
 use GuzzleHttp\Client;
 
-class GiepewuApi
+class GpwScraperService
 {
     public static function getTypes(): ?array
     {

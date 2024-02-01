@@ -31,15 +31,13 @@ class PostController extends \Controllers\BaseController
     {
         performance()::measure();
         $posts = $this->blog->getPublicPosts();
-        // TODO: $posts = cache($this->redis)->getSetReturn('getAllPublic', 60, fn () => $this->repo->getAllPublic()});
         performance()::measure();
 
-        header('Content-Type: application/json');
-        print json_encode([
+        response([
             'status' => 'ok',
             'time' => performance()::result(),
             'posts' => $posts,
-        ]);
+        ])->status(200);
     }
 
     public function getSinglePost(string $postId): void
@@ -49,13 +47,12 @@ class PostController extends \Controllers\BaseController
         $postAuthor = $this->user->getProfileByAccountId($post['publisher_account_id']);
         performance()::measure();
 
-        header('Content-Type: application/json');
-        print json_encode([
+        response([
             'status' => 'ok',
             'time' => performance()::result(),
             'post' => $post,
             'postAuthor' => $postAuthor,
-        ]);
+        ])->status(200);
     }
 
     public function getComments(string $postId): void
@@ -64,22 +61,20 @@ class PostController extends \Controllers\BaseController
         $comments = $this->blog->getCommentsByPostId($postId);
         performance()::measure();
 
-        header('Content-Type: application/json');
-        print json_encode([
+        response([
             'status' => 'ok',
             'time' => performance()::result(),
             'comments' => $comments,
-        ]);
+        ])->status(200);
     }
 
     public function rate(string $id)
     {
+        performance()::measure();
+
         $sessionId = $_POST['sessionId'] ?? null;
         $value = $_POST['value'] ?? null;
 
-        // TODO: Add validation
-
-        performance()::measure();
         $this->blog->upsertPostRating([
             'session_id' => $sessionId,
             'post_id' => $id,
@@ -90,6 +85,7 @@ class PostController extends \Controllers\BaseController
             'rating_average' => $rating['rating_average'] ?? 0,
             'rating_count' => $rating['rating_count'] ?? 0,
         ]);
+
         performance()::measure();
 
         response([

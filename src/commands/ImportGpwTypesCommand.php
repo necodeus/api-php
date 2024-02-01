@@ -3,11 +3,9 @@
 namespace Commands;
 
 use Libraries\Database;
-use Services\GiepewuApi;
+use Services\GpwScraperService;
 
-set_time_limit(10000);
-
-class ImportGpwTypesCommand extends \BaseCommand
+class ImportGpwTypesCommand extends BaseCommand
 {
     protected $name = 'import:gpw-types';
 
@@ -15,7 +13,7 @@ class ImportGpwTypesCommand extends \BaseCommand
 
     public function handle($arguments)
     {
-        $types = GiepewuApi::getTypes();
+        $types = GpwScraperService::getTypes();
 
         $db = new Database(
             $_ENV['DATABASE_HOST'],

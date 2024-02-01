@@ -3,6 +3,7 @@
 namespace Controllers\WeatherApi;
 
 use Predis\Client as RedisClient;
+use Services\OpenWeatherMapService;
 
 class WeatherController extends \Controllers\BaseController
 {
@@ -20,28 +21,28 @@ class WeatherController extends \Controllers\BaseController
     public function weather(): void
     {
         performance()::measure();
-
         $lat = $_GET['lat'] ?? 0;
         $lon = $_GET['lon'] ?? 0;
         $units = $_GET['units'] ?? 'metric';
-        $appid = $_GET['appid'] ?? $_ENV['OPENWEATHERMAP_API_KEY'];
+        $appid = $_GET['appid'] ?? $_ENV['OPENWEATHERMAP_API_TOKEN'];
 
-        $address = "https://api.openweathermap.org/data/2.5/weather?lat={$lat}&lon={$lon}&units={$units}";
-        $addressAuth = "{$address}&appid={$appid}";
+        $cacheKey = "{$lat}-{$lon}-{$units}-{$appid}";
 
         $response = [];
 
         try {
-            $cachedResponse = $this->redis->get($address);
+            $cachedResponse = $this->redis->get($cacheKey);
 
             if ($cachedResponse) {
                 $response = json_decode($cachedResponse, true);
+
                 $response['cached'] = true;
             } else {
-                $response = file_get_contents($addressAuth);
-                $this->redis->set($address, $response);
-                $this->redis->expire($address, 5);
-                $response = json_decode($response, true);
+                $response = OpenWeatherMapService::getWeather($lat, $lon, $units, $appid);
+
+                $this->redis->set($cacheKey, json_encode($response));
+                $this->redis->expire($cacheKey, 5);
+                
                 $response['cached'] = false;
             }
         } catch (\Exception $e) {

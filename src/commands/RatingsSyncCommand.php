@@ -6,7 +6,7 @@ use Predis\Client as RedisClient;
 use Libraries\Color;
 use Repositories\BlogRepository;
 
-class RatingsSyncCommand extends \BaseCommand
+class RatingsSyncCommand extends BaseCommand
 {
     protected $name = 'sync';
 

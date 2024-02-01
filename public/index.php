@@ -10,6 +10,9 @@ Predis\Autoloader::register();
 
 header("Access-Control-Allow-Origin: *");
 
+ini_set('memory_limit', '4096M');
+set_time_limit(10000);
+
 $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     $domain = $_SERVER['HTTP_HOST'];
 
@@ -24,7 +27,7 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
 
     if (preg_match('/^images\./', $domain)) {
         require_once __DIR__ . '/../src/rest/controllers/image/OutputController.php';
-        require_once __DIR__ . '/../src/routers/image.php';
+        require_once __DIR__ . '/../src/routers/images.php';
     }
 
     if (
@@ -70,14 +73,16 @@ $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 
 try {
     switch ($routeInfo[0]) {
-        case FastRoute\Dispatcher::NOT_FOUND:
+        case FastRoute\Dispatcher::NOT_FOUND: {
             print '404 Not Found';
             break;
-        case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+        }
+        case FastRoute\Dispatcher::METHOD_NOT_ALLOWED: {
             $allowedMethods = $routeInfo[1];
             print '405 Method Not Allowed';
             break;
-        case FastRoute\Dispatcher::FOUND:
+        }
+        case FastRoute\Dispatcher::FOUND: {
             $handler = $routeInfo[1];
             $vars = $routeInfo[2];
 
@@ -85,6 +90,10 @@ try {
             $class = new $class;
             $class->$method(...$vars);
             break;
+        }
+        default: {
+            
+        }
     }
 } catch (Exception $e) {
     print $e->getMessage();

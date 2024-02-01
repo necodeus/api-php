@@ -5,7 +5,8 @@
         "vlucas/phpdotenv": "^5.5",
         "guzzlehttp/guzzle": "^7.0",
         "aws/aws-sdk-php": "^3.283",
-        "predis/predis": "*"
+        "predis/predis": "*",
+        "webonyx/graphql-php": "^15.9"
     },
     "autoload": {
         "psr-4": {

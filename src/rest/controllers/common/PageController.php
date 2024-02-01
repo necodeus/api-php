@@ -21,11 +21,10 @@ class PageController
         $pages = $this->common->getPageBySlug($slug);
         performance()::measure();
 
-        header('Content-Type: application/json');
-        print json_encode([
+        response([
             'status' => 'ok',
             'time' => performance()::result(),
             'page' => $pages,
-        ]);
+        ])->status(200);
     }
 }

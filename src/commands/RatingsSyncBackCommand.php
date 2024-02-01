@@ -6,9 +6,10 @@ use Libraries\Color;
 use Predis\Client as RedisClient;
 use Repositories\BlogRepository;
 
-class RatingsSyncBackCommand extends \BaseCommand
+class RatingsSyncBackCommand extends BaseCommand
 {
     protected $name = 'sync-back';
+
     protected $description = 'Synchronizes ratings from MySQL to Redis';
 
     protected RedisClient $redis;

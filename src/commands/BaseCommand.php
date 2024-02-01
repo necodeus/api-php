@@ -1,5 +1,7 @@
 <?php
 
+namespace Commands;
+
 abstract class BaseCommand
 {
     protected $name;
