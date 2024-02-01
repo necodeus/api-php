@@ -5,6 +5,6 @@
  * shop-api.localhost
  */
 
-use Controllers\ShopApi\IndexController;
+use Controllers\ShopApi\OrderController;
 
-$r->addRoute('GET', '/api/v1/index[/]', IndexController::class . '@index');
+$r->addRoute('POST', '/api/v1/order[/]', OrderController::class . '@order');
