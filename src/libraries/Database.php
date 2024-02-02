@@ -84,7 +84,6 @@ class Database
         }
 
         $columns = array_keys(reset($bulkData));
-        $placeholders = array_map(function($col) { return ":$col"; }, $columns);
 
         $updateClauses = array_map(function($col) { return "`$col` = VALUES(`$col`)"; }, $columns);
 
