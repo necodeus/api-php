@@ -34,7 +34,7 @@ class RedisQueue
 
     public function addToQueue(string $query): void
     {
-        logger()->info("addToQueue($query)");
+        log_to_file("addToQueue({$query})", \Enums\LogLevel::INFO);
 
         $this->redis->rpush($this->queueKey, [serialize($query)]);
     }
@@ -43,12 +43,14 @@ class RedisQueue
     {
         while ($serializedQuery = $this->redis->lpop($this->queueKey)) {
             try {
-                logger()->info("processQueue($serializedQuery)");
+                log_to_file("processQueue($serializedQuery)", \Enums\LogLevel::INFO);
 
                 $query = unserialize($serializedQuery);
                 $this->db->exec($query);
             } catch (\Exception $e) {
-                logger()->error($e->getMessage());
+                $message = $e->getMessage();
+
+                log_to_file($message, \Enums\LogLevel::EXCEPTION);
 
                 continue;
             }

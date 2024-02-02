@@ -3,7 +3,7 @@
 namespace Commands;
 
 use Libraries\Database;
-use Services\File;
+use Libraries\File;
 
 class GetSchemaCommand extends BaseCommand
 {
