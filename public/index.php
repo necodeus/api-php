@@ -26,7 +26,7 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     }
 
     if (preg_match('/^images\./', $domain)) {
-        require_once __DIR__ . '/../src/rest/controllers/image/OutputController.php';
+        require_once __DIR__ . '/../src/rest/controllers/images/OutputController.php';
         require_once __DIR__ . '/../src/routers/images.php';
     }
 
@@ -39,7 +39,7 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     }
 
     if (preg_match('/^shop-api\./', $domain)) {
-        require_once __DIR__ . '/../src/rest/controllers/shop/IndexController.php';
+        require_once __DIR__ . '/../src/rest/controllers/shop/OrderController.php';
         require_once __DIR__ . '/../src/routers/shop-api.php';
     }
 
@@ -88,7 +88,7 @@ try {
 
             [$class, $method] = explode('@', $handler, 2);
             $class = new $class;
-            $class->$method(...$vars);
+            print $class->$method(...$vars);
             break;
         }
         default: {

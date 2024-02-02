@@ -2,8 +2,9 @@
 
 namespace Controllers\WeatherApi;
 
+use Enums\ControllerResponseType;
 use Predis\Client as RedisClient;
-use Services\OpenWeatherMapService;
+use Services\OpenWeatherMapApiService;
 
 class WeatherController extends \Controllers\BaseController
 {
@@ -18,7 +19,7 @@ class WeatherController extends \Controllers\BaseController
         ]);
     }
 
-    public function weather(): void
+    public function weather(): string
     {
         performance()::measure();
         $lat = $_GET['lat'] ?? 0;
@@ -38,7 +39,7 @@ class WeatherController extends \Controllers\BaseController
 
                 $response['cached'] = true;
             } else {
-                $response = OpenWeatherMapService::getWeather($lat, $lon, $units, $appid);
+                $response = OpenWeatherMapApiService::getWeather($lat, $lon, $units, $appid);
 
                 $this->redis->set($cacheKey, json_encode($response));
                 $this->redis->expire($cacheKey, 5);
@@ -52,6 +53,12 @@ class WeatherController extends \Controllers\BaseController
         }
         performance()::measure();
 
-        response($response)->status(200);
+        return response(ControllerResponseType::JSON)
+            ->status(200)
+            ->data([
+                'status' => 'ok',
+                'time' => performance()::result(),
+                'response' => $response,
+            ]);
     }
 }

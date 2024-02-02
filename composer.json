@@ -23,6 +23,6 @@
     "scripts": {
         "autoload": "composer dump-autoload",
         "test": "./vendor/bin/phpunit --testdox tests",
-        "coverage": "./vendor/bin/phpunit --coverage-html ./public/coverage"
+        "coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html ./public/coverage"
     }
 }

@@ -4,10 +4,6 @@ namespace Repositories;
 
 class BlogRepository extends BaseRepository
 {
-    /** ==========================================================
-     * C A T E G O R I E S
-     * ======================================================== */
-
     public function getCategories(): array
     {
         return [];
@@ -23,10 +19,6 @@ class BlogRepository extends BaseRepository
         return 0;
     }
 
-    /** ==========================================================
-     * T A G S
-     * ======================================================== */
-
     public function getTags(): array
     {
         return [];
@@ -41,15 +33,6 @@ class BlogRepository extends BaseRepository
     {
         return 0;
     }
-
-    /** ==========================================================
-     * C O M M E N T S
-     * ======================================================== */
-
-    // public function getComments(): array
-    // {
-    //     return [];
-    // }
 
     public function getCommentsByPostId(string $postId): array
     {
@@ -92,20 +75,6 @@ class BlogRepository extends BaseRepository
         return array_values($topLevelComments);
     }
 
-    // public function getCommentsCount(): int
-    // {
-    //     return 0;
-    // }
-
-    /** ==========================================================
-     * P O S T S
-     * ======================================================== */
-
-    // public function getPosts(): array
-    // {
-    //     return [];
-    // }
-
     public function getPublicPosts(int $page = 1, int $limit = 10): array
     {
         $offset = ($page - 1) * $limit;
@@ -116,7 +85,7 @@ class BlogRepository extends BaseRepository
                 CONCAT('https://images.necodeo.com/', main_image_id) AS main_image_url
             FROM b_posts bp
             INNER JOIN c_pages p ON p.content_id = bp.id
-            LIMIT $limit OFFSET $offset
+            LIMIT {$limit} OFFSET {$offset}
         ";
 
         return $this->db->fetchAll($query);
@@ -140,26 +109,12 @@ class BlogRepository extends BaseRepository
         return $result;
     }
 
-    // public function getPublicPostById(string $id): array
-    // {
-    //     return [];
-    // }
-
-    // public function getPostsCount(): int
-    // {
-    //     return 0;
-    // }
-
     public function updatePost(string $postId, array $data): int
     {
         $affected = $this->db->update('b_posts', $data, ['id' => $postId]);
 
         return $affected;
     }
-
-    /** ==========================================================
-     * P O S T   R A T I N G S
-     * ======================================================== */
 
     public function getPostRatings(): array
     {
@@ -186,21 +141,12 @@ class BlogRepository extends BaseRepository
         return $result;
     }
 
-    // public function getPostRatingsCount(): int
-    // {
-    //     return 0;
-    // }
-
     public function upsertPostRating(array $data): int
     {
         $affected = $this->db->upsert('b_post_ratings', $data);
 
         return $affected;
     }
-
-    /** ==========================================================
-     * P O S T   R A T I N G S   S U M M A R Y
-     * ======================================================== */
 
     public function getPostRatingsSummary(): array
     {
@@ -211,11 +157,6 @@ class BlogRepository extends BaseRepository
     {
         return [];
     }
-
-    // public function getPostRatingsSummaryCount(): int
-    // {
-    //     return 0;
-    // }
 
     public function upsertPostRatingsSummary(array $data): int
     {

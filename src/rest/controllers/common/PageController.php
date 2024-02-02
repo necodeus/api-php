@@ -3,6 +3,7 @@
 namespace Controllers\CommonApi;
 
 use Repositories\CommonRepository;
+use Enums\ControllerResponseType;
 
 class PageController
 {
@@ -13,7 +14,7 @@ class PageController
         $this->common = new CommonRepository();
     }
 
-    public function single(): void
+    public function single(): string
     {
         $slug = $_GET['slug'] ?? '';
 
@@ -21,10 +22,12 @@ class PageController
         $pages = $this->common->getPageBySlug($slug);
         performance()::measure();
 
-        response([
-            'status' => 'ok',
-            'time' => performance()::result(),
-            'page' => $pages,
-        ])->status(200);
+        return response(ControllerResponseType::JSON)
+            ->status(200)
+            ->data([
+                'status' => 'ok',
+                'time' => performance()::result(),
+                'page' => $pages,
+            ]);
     }
 }

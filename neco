@@ -4,8 +4,9 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 require_once 'src/helpers.php';
+require_once 'src/simple_html_dom.php';
+
 require_once 'src/libraries/Color.php';
-require_once 'src/libraries/simple_html_dom.php';
 require_once 'src/commands/BaseCommand.php';
 require_once 'src/commands/GetSchemaCommand.php';
 require_once 'src/commands/ImportGpwInstrumentsCommand.php';

@@ -25,8 +25,6 @@ class S3
 
   /**
    * Download a file from S3
-   *
-   * @return Result
    */
   public function download(string $bucket, string $key, string $file): Result
   {
@@ -39,8 +37,6 @@ class S3
 
   /**
    * Upload a file to S3
-   *
-   * @return Result
    */
   public function upload(string $bucket, string $key, string $body): Result
   {

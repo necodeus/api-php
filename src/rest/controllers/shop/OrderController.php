@@ -6,12 +6,17 @@ use Controllers\BaseController;
 
 class OrderController extends BaseController
 {
-    public function order(): void
+    public function order(): string
     {
         performance()::measure();
         $result = [];
         performance()::measure();
 
-        response($result)->status(200);
+        return response(ControllerResponseType::JSON)
+            ->data([
+                'status' => 'ok',
+                'time' => performance()::result(),
+                'result' => $result,
+            ]);
     }
 }

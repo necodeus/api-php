@@ -4,20 +4,6 @@ namespace Repositories;
 
 class UserRepository extends BaseRepository
 {
-    /** ==========================================================
-     * P R O F I L E S
-     * ======================================================== */
-
-    // public function getProfiles(): array
-    // {
-    //     return [];
-    // }
-
-    // public function getProfileById(string $id): array
-    // {
-    //     return [];
-    // }
-
     public function getProfileByAccountId(string $accountId): array
     {
         $query = "SELECT up.*
@@ -29,9 +15,4 @@ class UserRepository extends BaseRepository
             'accountId' => $accountId,
         ]);
     }
-
-    // public function getProfilesCount(): int
-    // {
-    //     return 0;
-    // }
 }

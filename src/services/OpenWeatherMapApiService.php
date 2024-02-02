@@ -4,7 +4,7 @@ namespace Services;
 
 use GuzzleHttp\Client;
 
-class OpenWeatherMapService
+class OpenWeatherMapApiService
 {
     public static function getWeather(string $lat, string $lon, string $units, string $appid): ?array
     {

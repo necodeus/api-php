@@ -1,8 +1,6 @@
 <?php
 
-use Libraries\Performance;
-use Libraries\Text;
-use Libraries\FileLogger;
+use Enums\ControllerResponseType;
 
 function uuidv4() {
     return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
@@ -14,19 +12,39 @@ function uuidv4() {
     );
 }
 
-function performance(): Performance
+function performance(): Libraries\Performance
 {
-    return new Performance();
+    return new Libraries\Performance();
 }
 
-function logger(): FileLogger
+function log_to_file(string $message, Enums\LogLevel $level = Enums\LogLevel::INFO): void
 {
-    return new FileLogger();
+    $log = sprintf("[%s] %s\n", $level, $message);
+
+    file_put_contents(
+        $_ENV['LOG_FILE'],
+        $log,
+        FILE_APPEND
+    );
 }
 
-function response($data = ""): Text
+/**
+ * @throws Exception
+ */
+function response(ControllerResponseType $type): Libraries\JsonResponse | Libraries\FileResponse
 {
-    return new Text($data);
+    switch ($type) {
+        case ControllerResponseType::JSON: {
+            $obj = new Libraries\JsonResponse();
+
+            return $obj->header('Content-Type', 'application/json');
+        }
+        case ControllerResponseType::FILE: {
+            return new Libraries\FileResponse();
+        }
+    }
+
+    throw new Exception('Invalid response type');
 }
 
 function snake_to_pascalcase(string $array): string

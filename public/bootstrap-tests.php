@@ -12,4 +12,3 @@ require __DIR__ . '/../src/helpers.php';
 
 // Load everything that is needed for tests
 require __DIR__ . '/../src/rest/controllers/BaseController.php';
-require __DIR__ . '/../src/rest/controllers/common/ImageController.php';
