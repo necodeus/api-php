@@ -4,19 +4,15 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 require_once 'src/helpers.php';
-require_once 'src/Libraries/Color.php';
+require_once 'src/simple_html_dom.php';
 
-require_once 'src/Commands/BaseCommand.php';
-
-require_once 'src/Libraries/simple_html_dom.php';
-
-require_once 'src/Commands/GetSchemaCommand.php';
-require_once 'src/Commands/ImportGpwInstrumentsCommand.php';
-require_once 'src/Commands/ImportGpwTypesCommand.php';
-require_once 'src/Commands/RatingsSyncBackCommand.php';
-require_once 'src/Commands/RatingsSyncCommand.php';
-require_once 'src/Commands/ThumbnailsGenerationCommand.php';
-require_once 'src/Commands/UpdateGpwInstrumentsCommand.php';
+require_once 'src/libraries/Color.php';
+require_once 'src/commands/BaseCommand.php';
+require_once 'src/commands/GetSchemaCommand.php';
+require_once 'src/commands/ImportGpwInstrumentsCommand.php';
+require_once 'src/commands/ImportGpwTypesCommand.php';
+require_once 'src/commands/ThumbnailsGenerationCommand.php';
+require_once 'src/commands/UpdateGpwInstrumentsCommand.php';
 
 // Environment variables
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/');
@@ -27,12 +23,13 @@ Predis\Autoloader::register();
 
 // Commands
 $commandMap = [
+    // Get schema of the database
     'get-schema' => new Commands\GetSchemaCommand(),
-    'import:gpw-instruments' => new Commands\ImportGpwInstrumentsCommand(),
-    'import:gpw-types' => new Commands\ImportGpwTypesCommand(),
-    'sync-back' => new Commands\RatingsSyncBackCommand(),
-    'sync' => new Commands\RatingsSyncCommand(),
-    'update:gpw-instruments' => new Commands\UpdateGpwInstrumentsCommand(),
+    // GPW related commands
+    'import:gpw-instruments' => new Commands\ImportGpwInstrumentsCommand(), // Import GPW instruments
+    'import:gpw-types' => new Commands\ImportGpwTypesCommand(), // Import GPW types
+    'update:gpw-instruments' => new Commands\UpdateGpwInstrumentsCommand(), // Update GPW instruments
+    // Thumbnails generation
     'thumbnails:generate' => new Commands\ThumbnailsGenerationCommand(),
 ];
 
