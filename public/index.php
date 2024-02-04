@@ -10,40 +10,50 @@ Predis\Autoloader::register();
 
 header("Access-Control-Allow-Origin: *");
 
+ini_set('memory_limit', '4096M');
+set_time_limit(10000);
+
 $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
     $domain = $_SERVER['HTTP_HOST'];
 
-    require_once __DIR__ . '/../src/Controllers/BaseController.php';
+    require_once __DIR__ . '/../src/rest/controllers/BaseController.php';
 
     // TODO: autoload controllers per domain
     if (preg_match('/^common-api\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/CommonApi/PageController.php';
-        require_once __DIR__ . '/../src/Routers/CommonApiRouter.php';
+        require_once __DIR__ . '/../src/rest/controllers/common/PageController.php';
+        require_once __DIR__ . '/../src/routers/common-api.php';
     }
 
     if (preg_match('/^images\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/Images/OutputController.php';
-        require_once __DIR__ . '/../src/Routers/ImageRouter.php';
+        require_once __DIR__ . '/../src/rest/controllers/images/OutputController.php';
+        require_once __DIR__ . '/../src/routers/images.php';
     }
 
-    if (preg_match('/^paper-api\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/PaperApi/PostController.php';
-        require_once __DIR__ . '/../src/Routers/PaperApiRouter.php';
+    if (
+        preg_match('/^paper-api\./', $domain)
+        || preg_match('/^blog-api\./', $domain)
+    ) {
+        require_once __DIR__ . '/../src/rest/controllers/blog/PostController.php';
+        require_once __DIR__ . '/../src/routers/blog-api.php';
     }
 
     if (preg_match('/^shop-api\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/ShopApi/IndexController.php';
-        require_once __DIR__ . '/../src/Routers/ShopApiRouter.php';
+        require_once __DIR__ . '/../src/rest/controllers/shop/OrderController.php';
+        require_once __DIR__ . '/../src/routers/shop-api.php';
     }
 
     if (preg_match('/^admin-api\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/AdminApi/Schemas/IndexController.php';
-        require_once __DIR__ . '/../src/Routers/AdminApiRouter.php';
+        require_once __DIR__ . '/../src/rest/controllers/admin/Schemas/IndexController.php';
+        require_once __DIR__ . '/../src/routers/admin-api.php';
+    }
+
+    if (preg_match('/^finance-api\./', $domain)) {
+        require_once __DIR__ . '/../src/routers/finance-api.php';
     }
 
     if (preg_match('/^weather-api\./', $domain)) {
-        require_once __DIR__ . '/../src/Controllers/WeatherApi/WeatherController.php';
-        require_once __DIR__ . '/../src/Routers/WeatherApiRouter.php';
+        require_once __DIR__ . '/../src/rest/controllers/weather/WeatherController.php';
+        require_once __DIR__ . '/../src/routers/weather-api.php';
     }
 }, [
     'cacheFile' => __DIR__ . '/../cache/route.cache',
@@ -62,21 +72,27 @@ $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 
 try {
     switch ($routeInfo[0]) {
-        case FastRoute\Dispatcher::NOT_FOUND:
+        case FastRoute\Dispatcher::NOT_FOUND: {
             print '404 Not Found';
             break;
-        case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+        }
+        case FastRoute\Dispatcher::METHOD_NOT_ALLOWED: {
             $allowedMethods = $routeInfo[1];
             print '405 Method Not Allowed';
             break;
-        case FastRoute\Dispatcher::FOUND:
+        }
+        case FastRoute\Dispatcher::FOUND: {
             $handler = $routeInfo[1];
             $vars = $routeInfo[2];
 
             [$class, $method] = explode('@', $handler, 2);
             $class = new $class;
-            $class->$method(...$vars);
+            print $class->$method(...$vars);
             break;
+        }
+        default: {
+            
+        }
     }
 } catch (Exception $e) {
     print $e->getMessage();

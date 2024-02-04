@@ -5,14 +5,15 @@
         "vlucas/phpdotenv": "^5.5",
         "guzzlehttp/guzzle": "^7.0",
         "aws/aws-sdk-php": "^3.283",
-        "predis/predis": "*"
+        "predis/predis": "*",
+        "webonyx/graphql-php": "^15.9"
     },
     "autoload": {
         "psr-4": {
-            "Services\\": "src/Services/",
-            "Repositories\\": "src/Repositories/",
-            "Libraries\\": "src/Libraries/",
-            "Enums\\": "src/Enums/",
+            "Services\\": "src/services/",
+            "Repositories\\": "src/repositories/",
+            "Libraries\\": "src/libraries/",
+            "Enums\\": "src/enums/",
             "Tests\\": "tests/"
         }
     },
@@ -22,6 +23,6 @@
     "scripts": {
         "autoload": "composer dump-autoload",
         "test": "./vendor/bin/phpunit --testdox tests",
-        "coverage": "./vendor/bin/phpunit --coverage-html ./public/coverage"
+        "coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html ./public/coverage"
     }
 }
