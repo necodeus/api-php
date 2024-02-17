@@ -36,8 +36,24 @@ class PostController extends \Controllers\BaseController
     public function getSinglePost(string $postId): string
     {
         performance()::measure();
+
         $post = $this->blog->getPostById($postId);
+
+        if (empty($post)) {
+            performance()::measure();
+            return response(ControllerResponseType::JSON)
+                ->status(404)
+                ->data([
+                    'status' => 'error',
+                    'time' => performance()::result(),
+                    'post' => null,
+                    'postAuthor' => null,
+                    'message' => 'Post not found',
+                ]);
+        }
+
         $postAuthor = $this->user->getProfileByAccountId($post['publisher_account_id']);
+
         performance()::measure();
 
         return response(ControllerResponseType::JSON)

@@ -82,7 +82,7 @@ class BlogRepository extends BaseRepository
         $query = "SELECT
                 bp.*,
                 p.*,
-                up.display_name AS author_name,
+                `up`.display_name AS author_name,
                 CONCAT('https://images.necodeo.com/', image_id_avatar) AS author_avatar_url,
                 CONCAT('https://images.necodeo.com/', main_image_id) AS main_image_url
             FROM b_posts bp
