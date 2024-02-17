@@ -82,9 +82,12 @@ class BlogRepository extends BaseRepository
         $query = "SELECT
                 bp.*,
                 p.*,
+                up.display_name AS author_name,
+                CONCAT('https://images.necodeo.com/', image_id_avatar) AS author_avatar_url,
                 CONCAT('https://images.necodeo.com/', main_image_id) AS main_image_url
             FROM b_posts bp
             INNER JOIN c_pages p ON p.content_id = bp.id
+            LEFT JOIN u_profiles up ON bp.publisher_account_id = up.account_id
             LIMIT {$limit} OFFSET {$offset}
         ";
 
