@@ -18,12 +18,6 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
 
     require_once __DIR__ . '/../src/rest/controllers/BaseController.php';
 
-    // TODO: autoload controllers per domain
-    if (preg_match('/^common-api\./', $domain)) {
-        require_once __DIR__ . '/../src/rest/controllers/common/PageController.php';
-        require_once __DIR__ . '/../src/routers/common-api.php';
-    }
-
     if (preg_match('/^images\./', $domain)) {
         require_once __DIR__ . '/../src/rest/controllers/images/OutputController.php';
         require_once __DIR__ . '/../src/routers/images.php';

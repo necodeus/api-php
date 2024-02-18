@@ -2,20 +2,25 @@
 
 namespace Controllers\Blog;
 
-use Repositories\BlogRepository;
+use Repositories\CommonRepository;
 use Repositories\UserRepository;
+use Repositories\BlogRepository;
 use Enums\ControllerResponseType;
 
 class PostController extends \Controllers\BaseController
 {
-    private BlogRepository $blog;
+    private CommonRepository $common;
 
     private UserRepository $user;
+
+    private BlogRepository $blog;
+
 
     public function __construct()
     {
         $this->blog = new BlogRepository();
         $this->user = new UserRepository();
+        $this->common = new CommonRepository();
     }
 
     public function getPosts(): string
@@ -33,26 +38,51 @@ class PostController extends \Controllers\BaseController
             ]);
     }
 
-    public function getSinglePost(string $postId): string
+    public function getInitialPageData(): string
     {
         performance()::measure();
 
-        $post = $this->blog->getPostById($postId);
+        $slug = $_GET['slug'] ?? '';
 
-        if (empty($post)) {
-            performance()::measure();
+        if (empty($slug)) {
+            return response(ControllerResponseType::JSON)
+                ->status(400)
+                ->data([
+                    'status' => 'error',
+                    'time' => null,
+                    'message' => 'Invalid slug',
+                ]);
+        }
+
+        $page = $this->common->getPageBySlug($slug);
+
+        if (empty($page)) {
             return response(ControllerResponseType::JSON)
                 ->status(404)
                 ->data([
                     'status' => 'error',
-                    'time' => performance()::result(),
+                    'time' => null,
+                    'page' => null,
                     'post' => null,
-                    'postAuthor' => null,
+                    'message' => 'Page not found',
+                ]);
+        }
+
+        $post = $this->blog->getPostById($page['content_id']);
+
+        if (empty($post)) {
+            return response(ControllerResponseType::JSON)
+                ->status(404)
+                ->data([
+                    'status' => 'error',
+                    'time' => null,
+                    'page' => $page,
+                    'post' => null,
                     'message' => 'Post not found',
                 ]);
         }
 
-        $postAuthor = $this->user->getProfileByAccountId($post['publisher_account_id']);
+        $profile = $this->user->getProfileByAccountId($post['publisher_account_id'] ?? '');
 
         performance()::measure();
 
@@ -61,8 +91,9 @@ class PostController extends \Controllers\BaseController
             ->data([
                 'status' => 'ok',
                 'time' => performance()::result(),
+                'page' => $page,
                 'post' => $post,
-                'postAuthor' => $postAuthor,
+                'postAuthor' => $profile,
             ]);
     }
 
