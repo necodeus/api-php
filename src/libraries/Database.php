@@ -116,7 +116,21 @@ class Database
 
         $params = array_merge(array_combine($columns, array_values($data)), array_combine($whereColumns, array_values($where)));
 
+        // print_r([
+        //     'query' => $query,
+        //     'params' => $params,
+        // ]);
+        // exit;
+
         $statement = $this->query($query, $params);
+
+        return $statement->rowCount();
+    }
+
+    public function executeRawQuery(string $query): int
+    {
+        $statement = $this->db->prepare($query);
+        $statement->execute();
 
         return $statement->rowCount();
     }

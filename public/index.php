@@ -10,6 +10,8 @@ Predis\Autoloader::register();
 
 header("Access-Control-Allow-Origin: *");
 
+date_default_timezone_set('Europe/Warsaw');
+
 ini_set('memory_limit', '4096M');
 set_time_limit(10000);
 
@@ -85,7 +87,7 @@ try {
             break;
         }
         default: {
-            
+
         }
     }
 } catch (Exception $e) {

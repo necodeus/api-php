@@ -15,7 +15,6 @@ class PostController extends \Controllers\BaseController
 
     private BlogRepository $blog;
 
-
     public function __construct()
     {
         $this->blog = new BlogRepository();
@@ -142,6 +141,147 @@ class PostController extends \Controllers\BaseController
                 'status' => 'ok',
                 'time' => performance()::result(),
                 'average' => floatval($rating['rating_average'] ?? 0),
+            ]);
+    }
+
+    public function addComment(string $postId): string
+    {
+        performance()::measure();
+
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        if (empty($_COOKIE['sessionId'])) {
+            return response(ControllerResponseType::JSON)
+                ->status(400)
+                ->data([
+                    'status' => 'error',
+                    'time' => performance()::result(),
+                    'message' => 'Session must be set',
+                ]);
+        }
+
+        if (empty($data['commentText'])) {
+            return response(ControllerResponseType::JSON)
+                ->status(400)
+                ->data([
+                    'status' => 'error',
+                    'time' => performance()::result(),
+                    'message' => 'Comment content must be set',
+                ]);
+        }
+
+        $data = [
+            'id' => uuidv4(),
+            'parent_id' => $data['commentId'] ?? null,
+            'content' => $data['commentText'] ?? '',
+            'post_id' => $postId,
+            'author_name' => 'Anonymous',
+            'upvotes' => 0,
+            'downvotes' => 0,
+            'created_at' => date('Y-m-d H:i:s'),
+            'session_id' => $_COOKIE['sessionId'],
+        ];
+
+        $upserted = $this->blog->addComment($data);
+        performance()::measure();
+
+        return response(ControllerResponseType::JSON)
+            ->status(200)
+            ->data([
+                'status' => 'ok',
+                'time' => performance()::result(),
+                'upserted' => $upserted,
+            ]);
+    }
+
+    public function upvoteComment(string $postId, string $commentId): string
+    {
+        performance()::measure();
+
+        if (empty($_COOKIE['sessionId'])) {
+            return response(ControllerResponseType::JSON)
+                ->status(400)
+                ->data([
+                    'status' => 'error',
+                    'time' => performance()::result(),
+                    'message' => 'Session must be set',
+                ]);
+        }
+
+        $commentActionId = $this->blog->getCommentActionId([
+            'session_id' => $_COOKIE['sessionId'],
+            'post_id' => $postId,
+            'comment_id' => $commentId,
+        ]);
+
+        $data = [
+            'id' => $commentActionId ?? uuidv4(),
+            'session_id' => $_COOKIE['sessionId'],
+            'post_id' => $postId,
+            'comment_id' => $commentId,
+            'type' => 'UPVOTE',
+        ];
+
+        $this->blog->upsertCommentAction($data);
+
+        $recalculated = $this->blog->recalculateCommentVotes($postId, $commentId);
+
+        $data['recalculated'] = $recalculated;
+
+        performance()::measure();
+
+        return response(ControllerResponseType::JSON)
+            ->status(200)
+            ->data([
+                'status' => 'ok',
+                'time' => performance()::result(),
+                'echo' => $data,
+            ]);
+    }
+
+    public function downvoteComment(string $postId, string $commentId): string
+    {
+        performance()::measure();
+
+        if (empty($_COOKIE['sessionId'])) {
+            return response(ControllerResponseType::JSON)
+                ->status(400)
+                ->data([
+                    'status' => 'error',
+                    'time' => performance()::result(),
+                    'message' => 'Session must be set',
+                ]);
+        }
+
+        $commentActionId = $this->blog->getCommentActionId([
+            'session_id' => $_COOKIE['sessionId'],
+            'post_id' => $postId,
+            'comment_id' => $commentId,
+        ]);
+
+        $data = [
+            'id' => $commentActionId ?? uuidv4(),
+            'session_id' => $_COOKIE['sessionId'],
+            'post_id' => $postId,
+            'comment_id' => $commentId,
+            'type' => 'DOWNVOTE',
+        ];
+
+        $this->blog->upsertCommentAction($data);
+
+        $recalculated = $this->blog->recalculateCommentVotes($postId, $commentId);
+
+        $data['recalculated'] = $recalculated;
+
+        performance()::measure();
+
+        return response(ControllerResponseType::JSON)
+            ->status(200)
+            ->data([
+                'status' => 'ok',
+                'time' => performance()::result(),
+                'echo' => $data,
             ]);
     }
 }

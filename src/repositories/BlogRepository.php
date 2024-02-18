@@ -34,6 +34,46 @@ class BlogRepository extends BaseRepository
         return 0;
     }
 
+    public function addComment(array $data): int
+    {
+        return $this->db->upsert('b_comments', $data);
+    }
+
+    public function upsertCommentAction(array $data): int
+    {
+        return $this->db->upsert('b_comment_actions', $data);
+    }
+
+    public function recalculateCommentVotes(string $postId, string $commentId): int
+    {
+        $query = "UPDATE b_comments
+            SET
+                upvotes = (SELECT COUNT(*) FROM b_comment_actions WHERE `post_id` = \"$postId\" AND `comment_id` = \"$commentId\" AND `type` = 'UPVOTE'),
+                downvotes = (SELECT COUNT(*) FROM b_comment_actions WHERE `post_id` = \"$postId\" AND `comment_id` = \"$commentId\" AND `type` = 'DOWNVOTE')
+            WHERE
+                post_id = \"$postId\"
+                AND id = \"$commentId\"
+        ";
+
+        return $this->db->executeRawQuery($query);
+    }
+
+    public function getCommentActionId(array $data): ?string
+    {
+        $query = "SELECT
+                id
+            FROM b_comment_actions
+            WHERE
+                session_id = :session_id
+                AND `post_id` = :post_id
+                AND `comment_id` = :comment_id
+        ";
+
+        $result = $this->db->fetch($query, $data);
+
+        return $result['id'] ?? null;
+    }
+
     public function getCommentsByPostId(string $postId): array
     {
         $query = "SELECT
