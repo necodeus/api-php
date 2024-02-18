@@ -7,19 +7,22 @@ CREATE TABLE `b_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci
 
 CREATE TABLE `b_comments` (
-  `id` varchar(34) NOT NULL,
-  `data` text NOT NULL,
-  `content_id` varchar(34) NOT NULL,
-  `account_id_author` varchar(34) NOT NULL,
+  `id` varchar(36) NOT NULL,
+  `parent_id` varchar(36) DEFAULT NULL,
+  `content` text NOT NULL,
+  `post_id` varchar(36) NOT NULL,
+  `author_name` varchar(128) NOT NULL,
   `created_at` timestamp NOT NULL,
+  `upvotes` int(11) DEFAULT NULL,
+  `downvotes` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci
 
 CREATE TABLE `b_post_ratings` (
-  `user_hash` char(32) NOT NULL,
+  `session_id` char(36) NOT NULL,
   `post_id` char(36) NOT NULL,
-  `rating` tinyint(4) NOT NULL,
-  PRIMARY KEY (`user_hash`,`post_id`)
+  `value` tinyint(4) NOT NULL,
+  PRIMARY KEY (`session_id`,`post_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci
 
 CREATE TABLE `b_posts` (
@@ -35,7 +38,10 @@ CREATE TABLE `b_posts` (
   `published_at` datetime DEFAULT NULL,
   `category_id` char(36) DEFAULT NULL,
   `tags` varchar(256) DEFAULT NULL,
-  `is_commentable` tinyint(1) DEFAULT NULL,
+  `is_commentable` tinyint(1) DEFAULT 1,
+  `rating_average` float DEFAULT 0,
+  `rating_count` int(11) DEFAULT 0,
+  `comments_count` int(11) DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci
 
@@ -165,6 +171,42 @@ CREATE TABLE `f_threads` (
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci
+
+CREATE TABLE `gpw_instruments` (
+  `type_id` varchar(16) NOT NULL,
+  `type_name` varchar(64) DEFAULT NULL,
+  `name` varchar(256) NOT NULL,
+  `isin` varchar(256) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `first_quotation_date` date DEFAULT NULL,
+  `last_quotation_date` date DEFAULT NULL,
+  PRIMARY KEY (`type_id`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci
+
+CREATE TABLE `gpw_quotations` (
+  `date` date NOT NULL,
+  `type_id` varchar(16) DEFAULT NULL,
+  `type_name` varchar(64) DEFAULT NULL,
+  `instrument_isin` varchar(256) NOT NULL,
+  `instrument_name` varchar(256) DEFAULT NULL,
+  `currency` varchar(64) DEFAULT NULL,
+  `open` varchar(64) DEFAULT NULL,
+  `high` varchar(64) DEFAULT NULL,
+  `low` varchar(64) DEFAULT NULL,
+  `close` varchar(64) DEFAULT NULL,
+  `settlement` varchar(64) DEFAULT NULL,
+  `change` varchar(64) DEFAULT NULL,
+  `turnover_volume` varchar(64) DEFAULT NULL,
+  `transactions` varchar(64) DEFAULT NULL,
+  `turnover_value` varchar(64) DEFAULT NULL,
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`date`,`instrument_isin`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci
+
+CREATE TABLE `gpw_types` (
+  `id` varchar(16) NOT NULL,
+  `name` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_polish_ci
 
 CREATE TABLE `s_complaints` (
   `id` char(36) NOT NULL,
@@ -385,3 +427,4 @@ CREATE TABLE `u_verifications` (
   `verified_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci
+
