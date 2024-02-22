@@ -100,6 +100,7 @@ class PostController extends \Controllers\BaseController
     {
         performance()::measure();
         $comments = $this->blog->getCommentsByPostId($postId);
+        $comments = array_reverse($comments); // TODO: We don't want to reverse the comments here (REFACTOR)
         performance()::measure();
 
         return response(ControllerResponseType::JSON)
