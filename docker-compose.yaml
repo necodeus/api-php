@@ -10,6 +10,10 @@ services:
       - ./.docker-config/conf.d/default.conf:/etc/nginx/conf.d/default.conf
       - .:/var/www/html
       - vendor:/var/www/html/vendor
+      # - ./logs/api_error.log:/var/log/nginx/api_error.log
+      # - ./logs/api_access.log:/var/log/nginx/api_access.log
+      # - ./logs/grafana_error.log:/var/log/nginx/grafana_error.log
+      # - ./logs/grafana_access.log:/var/log/nginx/grafana_access.log
     ports:
       - "80:80"
     networks:
@@ -55,6 +59,53 @@ services:
     networks:
       - necodeo
 
+  grafana:
+    image: grafana/grafana-enterprise
+    ports:
+      - "3003:3000"
+    environment:
+      - GF_LIVE_MAX_CONNECTIONS=0
+    volumes:
+      - ./.docker-config/grafana:/usr/local/etc/grafana
+    networks:
+      - necodeo
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - "9100:9100"
+    networks:
+      - necodeo
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./.docker-config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    networks:
+      - necodeo
+
 networks:
   necodeo:
 
@@ -64,3 +115,4 @@ networks:
 volumes:
   minio:
   vendor:
+  prometheus_data: {}
